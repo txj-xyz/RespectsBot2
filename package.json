@@ -1,0 +1,15 @@
+{
+  "name": "respectsbot-2",
+  "version": "2.1.0",
+  "description": "Responds to the letter F",
+  "main": "app.js",
+  "dependencies": {
+    "discord.js": "^12.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "TXJ69",
+  "license": "ISC"
+}
