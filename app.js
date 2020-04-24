@@ -4,7 +4,7 @@ const storageFile = require('./arrStorage.json');
 const client = new Discord.Client();
 
 //Re-did the local storage to a file based storage.
-confFile = storageFile;
+localFile = storageFile;
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -16,16 +16,16 @@ client.on('message', msg => {
   if (msg.content === 'f') {
 	  
 	confFile["respectCount"]++
-	fs.writeFileSync('./arrStorage.json', JSON.stringify(confFile, null, '\t'))
-    msg.reply(`has paid their Respects. :regional_indicator_f: :pray:\n:bar_chart: ${confFile["respectCount"]}`);
-	console.log(`Respect has been paid, Count: ${confFile["respectCount"]} User ${msg.author.username}`);
+	fs.writeFileSync('./arrStorage.json', JSON.stringify(localFile, null, '\t'))
+    msg.reply(`has paid their Respects. :regional_indicator_f: :pray:\n:bar_chart: ${localFile["respectCount"]}`);
+	console.log(`Respect has been paid, Count: ${localFile["respectCount"]} User ${msg.author.username}`);
   
   }else if(msg.content === 'F'){
 	
 	confFile["respectCount"]++
-	fs.writeFileSync('./arrStorage.json', JSON.stringify(confFile, null, '\t'))
-	msg.reply(`has paid their Respects. :regional_indicator_f: :pray:\n:bar_chart: ${confFile["respectCount"]}`)
-	console.log(`Respect has been paid, Count: ${confFile["respectCount"]} User ${msg.author.username}`);
+	fs.writeFileSync('./arrStorage.json', JSON.stringify(localFile, null, '\t'))
+	msg.reply(`has paid their Respects. :regional_indicator_f: :pray:\n:bar_chart: ${localFile["respectCount"]}`)
+	console.log(`Respect has been paid, Count: ${localFile["respectCount"]} User ${msg.author.username}`);
 	
   }
   
