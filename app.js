@@ -27,7 +27,7 @@ client.on('message', msg => {
 		msg.reply(`has paid their Respects. :regional_indicator_f: :pray:\n:bar_chart: ${localFile["respectCount"]}`)
 		console.log(`Respect has been paid, Count: ${localFile["respectCount"]} User ${msg.author.username}`);
 	
-	}else if(e.message.content.indexOf("<!@468171246018756609>") >= 0){
+	}else if(msg.content.indexOf("<!@468171246018756609>") >= 0){
 		msg.reply(":eyes:")
 		return
 	}
