@@ -15,20 +15,20 @@ client.on('message', msg => {
 	
 	if (msg.content === 'f') {
 	  
-		confFile["respectCount"]++
+		localFile["respectCount"]++
 		fs.writeFileSync('./arrStorage.json', JSON.stringify(localFile, null, '\t'))
 		msg.reply(`has paid their Respects. :regional_indicator_f: :pray:\n:bar_chart: ${localFile["respectCount"]}`);
 		console.log(`Respect has been paid, Count: ${localFile["respectCount"]} User ${msg.author.username}`);
 
 	}else if(msg.content === 'F'){
 
-		confFile["respectCount"]++
+		localFile["respectCount"]++
 		fs.writeFileSync('./arrStorage.json', JSON.stringify(localFile, null, '\t'))
 		msg.reply(`has paid their Respects. :regional_indicator_f: :pray:\n:bar_chart: ${localFile["respectCount"]}`)
 		console.log(`Respect has been paid, Count: ${localFile["respectCount"]} User ${msg.author.username}`);
 	
 	}else if(e.message.content.indexOf("<!@468171246018756609>") >= 0){
-		e.message.channel.sendMessage(":eyes:")
+		msg.reply(":eyes:")
 		return
 	}
 
