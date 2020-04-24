@@ -1,10 +1,11 @@
 {
   "name": "respectsbot-2",
-  "version": "2.1.1",
+  "version": "2.1.0",
   "description": "Responds to the letter F",
   "main": "app.js",
   "dependencies": {
-    "discord.js": "^12.1.1"
+    "discord.js": "^12.1.1",
+    "fs": "0.0.1-security"
   },
   "devDependencies": {},
   "scripts": {
