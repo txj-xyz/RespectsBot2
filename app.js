@@ -13,7 +13,9 @@ client.on('ready', () => {
 //Wait for F message.
 client.on('message', msg => {
 	
-	if (msg.content === 'f') {
+	//try to send the message if error then return it and stop the command.
+	try{
+		if (msg.content === 'f') {
 	  
 		localFile["respectCount"]++
 		fs.writeFileSync('./arrStorage.json', JSON.stringify(localFile, null, '\t'))
@@ -30,6 +32,10 @@ client.on('message', msg => {
 	}else if(msg.content.indexOf("<!@468171246018756609>") >= 0){
 		msg.reply(":eyes:")
 		return
+	}
+	}catch(e){
+		console.log(`Error found with sending message, dumping.`)
+		console.log(e)
 	}
 
 });
