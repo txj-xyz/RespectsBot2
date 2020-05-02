@@ -1,7 +1,5 @@
 # RespectsBot2
  Simple remake of the original bot on Discord.JS. Responds only to "F" or "f" with a message saying you paid your respects.
- 
- If you tag the bot it will respond with an `:eyes:` emoji.
 
 
 ## Installation
