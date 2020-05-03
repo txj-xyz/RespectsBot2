@@ -13,5 +13,7 @@
 ```
 discord.js
 nodejs
-fs
+mongodb
+systeminformation
+humanize-duration
 ```
