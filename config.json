@@ -1,0 +1,11 @@
+{
+    "bot" : {
+        "token": "<bot_token>",
+        "dblToken": "<discord_bot_listing_api_token>"
+    },
+    "database" : {
+        "db" : "<mongodb_db>",
+        "host" : "<mongodb_host>",
+        "port" : <mongodb_port>
+    }
+}
