@@ -112,6 +112,8 @@ client.on('message', async msg => {
     //.setFooter(msg.author.tag)
     .addField('Server Respects', `\`${fcount}\``, true)
     .addField('Total Respects', `\`${total}\``, true)
+    
+    //old format, MonkaS
     //msg.reply(`has paid their Respects. :regional_indicator_f: :pray:\nTotal Respects: \`${total}\`\nRespects Paid on this guild: \`${fcount}\``)
     )
   }
