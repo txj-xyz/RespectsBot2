@@ -4,7 +4,7 @@
         "dblToken": "<discord_bot_listing_api_token>"
     },
     "botinfo" : {
-		"error_channel":"<channel_id>12323154231523452452",
+		"error_channel":"<wtf is this broken?>",
         "owner" : "<owner_tag>",
         "ownerid" : "<owner_userID>"
     },
