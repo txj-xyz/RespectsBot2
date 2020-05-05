@@ -3,6 +3,11 @@
         "token": "<bot_token>",
         "dblToken": "<discord_bot_listing_api_token>"
     },
+    "botinfo" : {
+		"error_channel":"",
+        "owner" : "<owner_tag>",
+        "ownerid" : "<owner_userID>"
+    },
     "database" : {
         "db" : "<mongodb_db>",
         "host" : "<mongodb_host>",
