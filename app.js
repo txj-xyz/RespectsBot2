@@ -35,6 +35,10 @@ function formatBytes(bytes){
 let cpu
 let operating
 
+//More Logging for the Discord.JS Client
+client.on("warn", info => console.log(info));
+client.on("error", console.error);
+
 //on client ready, connect over to the db for mongo and get ready to store data.
 client.on('ready', async () => {
   cpu = await si.cpu()
@@ -84,11 +88,26 @@ client.on('message', async msg => {
         .setTitle('Respects Bot - Commands')
         .setColor('#ffff4f')
         .setTimestamp()
-        .setDescription('`rb!ping` - Ping the websocket!\n`rb!info` - Returns process information on the bot like uptime, guilds etc.\n`rb!help` - Shows this page!\n`rb!invite` - Invite the bot to your server with this command, or [click here](https://discordapp.com/api/oauth2/authorize?client_id=468171246018756609&permissions=3072&scope=bot)')
+        .setDescription(
+        '`rb!ping` - Ping the websocket!\n'
+        +'`rb!info` - Returns process information on the bot like uptime, guilds etc.\n'
+        +'`rb!help` - Shows this page!\n'
+        +'`rb!invite` - Invite the bot to your server with this command, or [click here](https://discordapp.com/api/oauth2/authorize?client_id=468171246018756609&permissions=3072&scope=bot)\n\n'
+        +`Music Commands [BETA] (Enabled?:${cfg.botinfo.music_enabled})\n`
+        +'`rb!play` - Play Music from Youtube.\n'
+        +'`rb!pause` - Pause the current song.\n'
+        +'`rb!resume` - Resume the current song.\n'
+        +'`rb!queue` - Show the current music queue and what is currently playing.\n'
+        +'`rb!skip` - Skip the current song.\n'
+        +'`rb!stop` - Stop the current song.\n'
+        +'`rb!loop` - Toggle loop for the current song.\n'
+        +'`rb!volume` - Change the volume of the bot on the fly.\n'
+        +'`rb!remove` - Remove a song from the music queue.\n'
+        )
         .setFooter(`${cfg.botinfo.owner}`)
     )
   }
-  if(msg.content.toLowerCase() === 'rb!ping' && msg.author.id === cfg.botinfo.ownerid) return msg.channel.send(`Pong! Websocket Latency: ${client.ws.ping}ms`);
+  if(msg.content.toLowerCase() === 'rb!ping' && msg.author.id === cfg.botinfo.ownerid) return msg.channel.send(`Pong! ${client.ws.ping}ms`);
   if(msg.content.toLowerCase() === 'rb!shutdown' && msg.author.id === cfg.botinfo.ownerid) return process.exit(1);
   if(msg.content.toLowerCase() === 'rb!invite'){
     msg.reply('https://discordapp.com/api/oauth2/authorize?client_id=468171246018756609&permissions=3072&scope=bot')
