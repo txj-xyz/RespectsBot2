@@ -5,7 +5,7 @@
     },
     "botinfo" : {
         "music_disabled":"❌",
-        "music_enabled":"✔️",
+        "music_enabled":"✅",
         "error_channel":"<channel_id>",
         "owner" : "<owner_tag>",
         "ownerid" : "<owner_userID>"

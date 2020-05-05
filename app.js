@@ -93,7 +93,7 @@ client.on('message', async msg => {
         +'`rb!info` - Returns process information on the bot like uptime, guilds etc.\n'
         +'`rb!help` - Shows this page!\n'
         +'`rb!invite` - Invite the bot to your server with this command, or [click here](https://discordapp.com/api/oauth2/authorize?client_id=468171246018756609&permissions=3072&scope=bot)\n\n'
-        +`Music Commands [BETA] (Enabled?:${cfg.botinfo.music_enabled})\n`
+        +`**Music Commands [BETA]** Enabled?:${cfg.botinfo.music_enabled}\n`
         +'`rb!play` - Play Music from Youtube.\n'
         +'`rb!pause` - Pause the current song.\n'
         +'`rb!resume` - Resume the current song.\n'
