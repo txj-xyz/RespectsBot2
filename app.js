@@ -1,8 +1,8 @@
 const Discord = require('discord.js')
 const si = require('systeminformation')
-const humanizeDuration = require('humanize-duration')
 const cfg = require("./config.json")
 const DBL = require("dblapi.js")
+const humanizeDuration = require('humanize-duration')
 const mongo = require("mongodb").MongoClient
 
 //Spawn Clients for use elsewhere later
@@ -73,7 +73,7 @@ client.on('message', async msg => {
         //.addField('Shards', `\`${parseInt(client.options.shards) + 1}\``, true)
         .addField('Ping', `\`${client.ws.ping} ms\``, true)
         .addField('Uptime', `\`${humanizeDuration(client.uptime)}\``, true)
-        .addField('Developer', '`${cfg.botinfo.owner}`', true)
+        .addField('Developer', '`TXJ#0001`', true)
     )
   }
   if(msg.content.toLowerCase() === 'rb!help'){
