@@ -11,6 +11,6 @@
     "database" : {
         "db" : "<mongodb_db>",
         "host" : "<mongodb_host>",
-        "port" : <mongodb_port>
+        "port" : "<mongodb_port>"
     }
 }
