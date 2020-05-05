@@ -2,6 +2,8 @@ const Discord = require('discord.js')
 const si = require('systeminformation')
 const cfg = require("./config.json")
 const DBL = require("dblapi.js")
+
+//WOW OMG A COMMENT TAG HAHA LE FUNNY MEME XD
 const humanizeDuration = require('humanize-duration')
 const mongo = require("mongodb").MongoClient
 
