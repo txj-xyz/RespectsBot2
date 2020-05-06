@@ -11,9 +11,10 @@
 ## Requirements
 
 ```
-discord.js
-nodejs
-mongodb
-systeminformation
-humanize-duration
+"dblapi.js": "^2.4.0",
+"discord.js": "^12.1.1",
+"fs": "0.0.1-security",
+"humanize-duration": "^3.22.0",
+"mongodb": "^3.5.7",
+"systeminformation": "^4.24.1"
 ```
