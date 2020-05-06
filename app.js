@@ -63,7 +63,7 @@ client.on('ready', async () => {
 client.on('message', async msg => {
 
   //pull stats for bot :thinking: using the info command
-  if(msg.content.toLowerCase() === 'rb!info'){
+  if(msg.content.toLowerCase() === `${cfg.bot.prefix}info`){
     msg.channel.send(
       new Discord.MessageEmbed()
         .setTitle('Statistics')
@@ -77,11 +77,12 @@ client.on('message', async msg => {
         .addField('CPU', `\`${cpu.cores} Cores\``, true)
         .addField('Platform', `\`${operating.platform}\``, true)
         //.addField('Shards', `\`${parseInt(client.options.shards) + 1}\``, true)
-        .addField('Ping', `\`${client.ws.ping} ms\``, true)
+        .addField('Ping', `\`${client.ws.ping}ms\``, true)
         .addField('Uptime', `\`${humanizeDuration(client.uptime)}\``, true)
         .addField('Developer', '`TXJ#0001`', true)
     )
   }
+
   if(msg.content.toLowerCase() === 'rb!help'){
     msg.reply(
       new Discord.MessageEmbed()
@@ -89,29 +90,31 @@ client.on('message', async msg => {
         .setColor('#ffff4f')
         .setTimestamp()
         .setDescription(
-        '`rb!ping` - Ping the websocket!\n'
-        +'`rb!info` - Returns process information on the bot like uptime, guilds etc.\n'
-        +'`rb!help` - Shows this page!\n'
-        +`\`rb!invite\` - Invite the bot to your server with this command, or [click here](\`${cfg.botinfo.invite_url}\`)\n\n`
-        +`**Music Commands [BETA]** Enabled?:${cfg.botinfo.music_enabled}\n`
-        +'`rb!play` - Play Music from Youtube.\n'
-        +'`rb!pause` - Pause the current song.\n'
-        +'`rb!resume` - Resume the current song.\n'
-        +'`rb!queue` - Show the current music queue and what is currently playing.\n'
-        +'`rb!skip` - Skip the current song.\n'
-        +'`rb!stop` - Stop the current song.\n'
-        +'`rb!loop` - Toggle loop for the current song.\n'
-        +'`rb!volume` - Change the volume of the bot on the fly.\n'
-        +'`rb!remove` - Remove a song from the music queue.\n'
+        `\`${cfg.bot.prefix}ping\` - Ping the websocket!\n`
+        +`\`${cfg.bot.prefix}info\` - Returns process information on the bot like uptime, guilds etc.\n`
+        +`\`${cfg.bot.prefix}help\` - Shows this page!\n`
+        +`\`${cfg.bot.prefix}invite\` - Invite the bot to your server with this command, or [click here](\`${cfg.botinfo.invite_url}\`)\n\n`
+        +`**Music Commands [BETA]** Enabled: ${cfg.botinfo.music_enabled}\n`
+        +`\`${cfg.bot.prefix}[play, p]\` - Play/Resume Music from Youtube.\n`
+        +`\`${cfg.bot.prefix}[queue, q]\` - Show the current music queue and what is currently playing.\n`
+        +`\`${cfg.bot.prefix}[skip, s]\` - Skip the current song.\n`
+        +`\`${cfg.bot.prefix}[volume, vol]\` - Change the volume of the bot on the fly.\n`
+        +`\`${cfg.bot.prefix}pause\` - Pause the current song.\n`
+        //+'`rb!resume` - Resume the current song.\n'
+        +`\`${cfg.bot.prefix}stop\` - Stop the current song.\n`
+        //+'`rb!loop` - Toggle loop for the current song.\n'
+        +`\`${cfg.bot.prefix}remove\` - Remove a song from the music queue.\n`
         )
         .setFooter(`${cfg.botinfo.owner}`)
     )
   }
-  if(msg.content.toLowerCase() === 'rb!ping' && msg.author.id === cfg.botinfo.ownerid) return msg.channel.send(`Pong! ${client.ws.ping}ms`);
-  if(msg.content.toLowerCase() === 'rb!shutdown' && msg.author.id === cfg.botinfo.ownerid) return process.exit(1);
-  if(msg.content.toLowerCase() === 'rb!invite'){
-    msg.reply('https://discordapp.com/api/oauth2/authorize?client_id=468171246018756609&permissions=3072&scope=bot')
-  }
+
+  if(msg.content.toLowerCase() === `${cfg.bot.prefix}invite`){
+    msg.reply(`${cfg.botinfo.invite_url}`)
+  };
+
+  if(msg.content.toLowerCase() === `${cfg.bot.prefix}ping`) return msg.channel.send(`Pong! ${client.ws.ping}ms`);
+  if(msg.content.toLowerCase() === `${cfg.bot.prefix}shutdown` && msg.author.id === cfg.botinfo.ownerid) return process.exit(1);
 
   if(msg.content.toLowerCase() === 'f' && !msg.author.bot){
       //If client.database doesnt exist that means our database isnt connected

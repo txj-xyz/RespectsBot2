@@ -1,5 +1,6 @@
 {
     "bot" : {
+        "prefix":"<prefix>",
         "token": "<bot_token>",
         "dblToken": "<discord_bot_listing_api_token>"
     },
