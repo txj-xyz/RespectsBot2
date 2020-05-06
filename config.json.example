@@ -5,6 +5,8 @@
         "dblToken": "<discord_bot_listing_api_token>"
     },
     "botinfo" : {
+        "invite_url":<invite_url>",
+        "music_status":"<emoji_for_status>",
         "music_disabled":"❌",
         "music_enabled":"✅",
         "error_channel":"<channel_id>",

@@ -94,7 +94,7 @@ client.on('message', async msg => {
         +`\`${cfg.bot.prefix}info\` - Returns process information on the bot like uptime, guilds etc.\n`
         +`\`${cfg.bot.prefix}help\` - Shows this page!\n`
         +`\`${cfg.bot.prefix}invite\` - Invite the bot to your server with this command, or [click here](\`${cfg.botinfo.invite_url}\`)\n\n`
-        +`**Music Commands [BETA]** Enabled: ${cfg.botinfo.music_enabled}\n`
+        +`**Music Commands [BETA]** Enabled: ${cfg.botinfo.music_status}\n`
         +`\`${cfg.bot.prefix}[play, p]\` - Play/Resume Music from Youtube.\n`
         +`\`${cfg.bot.prefix}[queue, q]\` - Show the current music queue and what is currently playing.\n`
         +`\`${cfg.bot.prefix}[skip, s]\` - Skip the current song.\n`
