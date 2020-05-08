@@ -82,8 +82,8 @@ client.on('message', async msg => {
         .addField('Developer', '`TXJ#0001`', true)
     )
   }
-
-  if(msg.content.toLowerCase() === 'rb!help'){
+  //random comment
+  if(msg.content.toLowerCase() === `${cfg.bot.prefix}help`){
     msg.reply(
       new Discord.MessageEmbed()
         .setTitle('Respects Bot - Commands')
@@ -94,15 +94,13 @@ client.on('message', async msg => {
         +`\`${cfg.bot.prefix}info\` - Returns process information on the bot like uptime, guilds etc.\n`
         +`\`${cfg.bot.prefix}help\` - Shows this page!\n`
         +`\`${cfg.bot.prefix}invite\` - Invite the bot to your server with this command, or [click here](\`${cfg.botinfo.invite_url}\`)\n\n`
-        +`**Music Commands [BETA]** Enabled: ${cfg.botinfo.music_status}\n`
+        +`**Music Commands** Enabled: ${cfg.botinfo.music_status}\n`
         +`\`${cfg.bot.prefix}[play, p]\` - Play/Resume Music from Youtube.\n`
         +`\`${cfg.bot.prefix}[queue, q]\` - Show the current music queue and what is currently playing.\n`
         +`\`${cfg.bot.prefix}[skip, s]\` - Skip the current song.\n`
         +`\`${cfg.bot.prefix}[volume, vol]\` - Change the volume of the bot on the fly.\n`
         +`\`${cfg.bot.prefix}pause\` - Pause the current song.\n`
-        //+'`rb!resume` - Resume the current song.\n'
         +`\`${cfg.bot.prefix}stop\` - Stop the current song.\n`
-        //+'`rb!loop` - Toggle loop for the current song.\n'
         +`\`${cfg.bot.prefix}remove\` - Remove a song from the music queue.\n`
         )
         .setFooter(`${cfg.botinfo.owner}`)
@@ -115,7 +113,7 @@ client.on('message', async msg => {
 
   if(msg.content.toLowerCase() === `${cfg.bot.prefix}ping`) return msg.channel.send(`Pong! ${client.ws.ping}ms`);
   if(msg.content.toLowerCase() === `${cfg.bot.prefix}shutdown` && msg.author.id === cfg.botinfo.ownerid) return process.exit(1);
-
+  
   if(msg.content.toLowerCase() === 'f' && !msg.author.bot){
       //If client.database doesnt exist that means our database isnt connected
       if(!client.database) return msg.reply('Error: Database not connected! Please contact TXJ#0001')
