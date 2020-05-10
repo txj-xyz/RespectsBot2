@@ -1,7 +1,8 @@
 const Discord = require('discord.js')
 const si = require('systeminformation')
-const cfg = require("./config.json")
+const cfg = require("./config/config.json")
 const DBL = require("dblapi.js")
+const blacklist = require("./config/userblocklist.json")
 
 //WOW OMG A COMMENT TAG HAHA LE FUNNY MEME XD
 const humanizeDuration = require('humanize-duration')
@@ -51,6 +52,7 @@ client.on('ready', async () => {
   .then(console.log)
   .catch(console.error)
 
+  //This really isn't needed if you are not using "top.gg" DBL.
   setInterval(async () => {
     dbl.postStats(client.guilds.cache.size)
     .catch(e => console.log(`Error posting stats: ${e}`))
@@ -61,6 +63,8 @@ client.on('ready', async () => {
 })
 
 client.on('message', async msg => {
+  //check blacklist first and ignore things if they are blocked, this will be way better in the future
+  if(blacklist.bannedusers.includes(msg.author.id)) return;
 
   //pull stats for bot :thinking: using the info command
   if(msg.content.toLowerCase() === `${cfg.bot.prefix}info`){
@@ -92,6 +96,7 @@ client.on('message', async msg => {
         .setDescription(
         `\`${cfg.bot.prefix}ping\` - Ping the websocket!\n`
         +`\`${cfg.bot.prefix}info\` - Returns process information on the bot like uptime, guilds etc.\n`
+        +`\`${cfg.bot.prefix}vote\` - Vote for the bot and support me!\n`
         +`\`${cfg.bot.prefix}help\` - Shows this page!\n`
         +`\`${cfg.bot.prefix}invite\` - Invite the bot to your server with this command, or [click here](\`${cfg.botinfo.invite_url}\`)\n\n`
         +`**Music Commands** Enabled: ${cfg.botinfo.music_status}\n`
@@ -109,6 +114,9 @@ client.on('message', async msg => {
 
   if(msg.content.toLowerCase() === `${cfg.bot.prefix}invite`){
     msg.reply(`${cfg.botinfo.invite_url}`)
+  };
+  if(msg.content.toLowerCase() === `${cfg.bot.prefix}vote`){
+    msg.reply(`https://top.gg/bot/468171246018756609/vote`)
   };
 
   if(msg.content.toLowerCase() === `${cfg.bot.prefix}ping`) return msg.channel.send(`Pong! ${client.ws.ping}ms`);
@@ -157,7 +165,7 @@ client.on('message', async msg => {
       .setTimestamp()
       .addField('Server Respects', `\`${fcount}\``, true)
       .addField('Total Respects', `\`${total}\``, true)
-      ).catch(e => msg.guild.channels.cache.get(cfg.botinfo.error_channel).send(
+      ).catch(e => client.channels.cache.get(cfg.botinfo.error_channel).send(
         new Discord.MessageEmbed()
         .setColor('#ff0000')
         .setTimestamp()
