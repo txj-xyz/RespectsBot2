@@ -1,16 +1,15 @@
 const Discord = require('discord.js')
-const si = require('systeminformation')
 const cfg = require("./config/config.json")
 const DBL = require("dblapi.js")
 const blacklist = require("./config/userblocklist.json")
+const fs = require('fs');
 
-//WOW OMG A COMMENT TAG HAHA LE FUNNY MEME XD
-const humanizeDuration = require('humanize-duration')
-const mongo = require("mongodb").MongoClient
-
-//Spawn Clients for use elsewhere later
 const client = new Discord.Client()
+//Create DBL API Post, This is not needed if you do not use top.gg
 const dbl = new DBL(cfg.bot.dblToken, client)
+
+//Mongo initilization
+const mongo = require("mongodb").MongoClient
 
 //connect over to mongo and fufil the Promise()
 function connectDB() {
@@ -22,35 +21,25 @@ function connectDB() {
   })
 }
 
-function formatBytes(bytes){
-  if (bytes>=1000000000) {bytes=(bytes/1000000000).toFixed(2)+'GB';}
-  else if (bytes>=1000000) {bytes=(bytes/1000000).toFixed(2)+'MB';}
-  else if (bytes>=1000) {bytes=(bytes/1000).toFixed(2)+'KB';}
-  else if (bytes>1) {bytes=bytes+' bytes';}
-  else if (bytes==1) {bytes=bytes+' byte';}
-  else {bytes='0 byte';}
-  return bytes;
-}
+//Create command object structure
+client.commands = new Discord.Collection();
 
-//Global vars for rb!info command.
-let cpu
-let operating
+//Load in <command>.js files and map to client.commands
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	client.commands.set(command.name, command);
+}
 
 //More Logging for the Discord.JS Client
 client.on("warn", info => console.log(info));
 client.on("error", console.error);
 
-//on client ready, connect over to the db for mongo and get ready to store data.
-client.on('ready', async () => {
-  cpu = await si.cpu()
-  operating = await si.osInfo()
 
-  console.log(`Logged in as ${client.user.tag}!`)
+client.on('ready', async () => {
 
   //set game for the bot so we can inform users of the help command :poggers:
   client.user.setPresence({ activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | rb!help` } })
-  .then(console.log)
-  .catch(console.error)
 
   //This really isn't needed if you are not using "top.gg" DBL.
   setInterval(async () => {
@@ -60,68 +49,59 @@ client.on('ready', async () => {
 
   //assign mongodb cursor to client.database for use elsewhere
   client.database = await connectDB()
+
+  console.log(`${client.user.username} has started, with ${client.users.cache.size} users, in ${client.channels.cache.size} channels of ${client.guilds.cache.size} guilds.`);
+  //Load up command files, later we will make live reloads
+  for (const file of commandFiles) {
+    const command = require(`./commands/${file}`);
+    console.log(`Command Loaded: ${command.name} - ${command.description}`);
+  }
 })
 
+
+
 client.on('message', async msg => {
+  const args = msg.content.slice(cfg.bot.prefix.length).split(/ +/);
+  const command = args.shift().toLowerCase();
+
   //check blacklist first and ignore things if they are blocked, this will be way better in the future
   if(blacklist.bannedusers.includes(msg.author.id)) return;
 
-  //pull stats for bot :thinking: using the info command
-  if(msg.content.toLowerCase() === `${cfg.bot.prefix}info`){
-    msg.channel.send(
+  //not going to publish this, purely for testing.
+  try{
+    await client.database.collection('messages').insertOne({
+      guild_id: msg.guild.id,
+      username: msg.author.tag,
+      userid: msg.author.id
+    })
+  }catch(err){
+    client.channels.cache.get(cfg.botinfo.error_channel).send(
       new Discord.MessageEmbed()
-        .setTitle('Statistics')
-        .setColor('#fcebb3')
-        .setTimestamp()
-        .setFooter(msg.author.tag)
-        .addField('Users', `\`${client.users.cache.size}\``, true)
-        .addField('Guilds', `\`${client.guilds.cache.size}\``, true)
-        .addField('Language', '`NodeJS`', true)
-        .addField('RAM', `\`${formatBytes(process.memoryUsage().rss)}\`/\`8GB\``, true)
-        .addField('CPU', `\`${cpu.cores} Cores\``, true)
-        .addField('Platform', `\`${operating.platform}\``, true)
-        //.addField('Shards', `\`${parseInt(client.options.shards) + 1}\``, true)
-        .addField('Ping', `\`${client.ws.ping}ms\``, true)
-        .addField('Uptime', `\`${humanizeDuration(client.uptime)}\``, true)
-        .addField('Developer', '`TXJ#0001`', true)
-    )
-  }
-  //random comment
-  if(msg.content.toLowerCase() === `${cfg.bot.prefix}help`){
-    msg.reply(
-      new Discord.MessageEmbed()
-        .setTitle('Respects Bot - Commands')
-        .setColor('#ffff4f')
-        .setTimestamp()
-        .setDescription(
-        `\`${cfg.bot.prefix}ping\` - Ping the websocket!\n`
-        +`\`${cfg.bot.prefix}info\` - Returns process information on the bot like uptime, guilds etc.\n`
-        +`\`${cfg.bot.prefix}vote\` - Vote for the bot and support me!\n`
-        +`\`${cfg.bot.prefix}help\` - Shows this page!\n`
-        +`\`${cfg.bot.prefix}invite\` - Invite the bot to your server with this command, or [click here](\`${cfg.botinfo.invite_url}\`)\n\n`
-        +`**Music Commands** Enabled: ${cfg.botinfo.music_status}\n`
-        +`\`${cfg.bot.prefix}[play, p]\` - Play/Resume Music from Youtube.\n`
-        +`\`${cfg.bot.prefix}[queue, q]\` - Show the current music queue and what is currently playing.\n`
-        +`\`${cfg.bot.prefix}[skip, s]\` - Skip the current song.\n`
-        +`\`${cfg.bot.prefix}[volume, vol]\` - Change the volume of the bot on the fly.\n`
-        +`\`${cfg.bot.prefix}pause\` - Pause the current song.\n`
-        +`\`${cfg.bot.prefix}stop\` - Stop the current song.\n`
-        +`\`${cfg.bot.prefix}remove\` - Remove a song from the music queue.\n`
-        )
-        .setFooter(`${cfg.botinfo.owner}`)
+      .setColor('#ff0000')
+      .setTimestamp()
+      .addField('Error Dump', `\`\`\`${err}\`\`\``, false)
+      .addField('Channel ID', `\`${msg.channel.id}\``, false)
+      .addField('Guild ID', `\`${msg.guild.id}\``, false)
+      .addField('User Requested', `\`${msg.author.tag}\``, false)
+      .addField('User ID', `\`${msg.author.id}\``, false)
     )
   }
 
-  if(msg.content.toLowerCase() === `${cfg.bot.prefix}invite`){
-    msg.reply(`${cfg.botinfo.invite_url}`)
-  };
-  if(msg.content.toLowerCase() === `${cfg.bot.prefix}vote`){
-    msg.reply(`https://top.gg/bot/468171246018756609/vote`)
-  };
+ 
+  //EVAL COMMAND
+  try{
+    if(command == 'info') return client.commands.get(command).execute(client, msg, args);
+    if(command == 'vote') return client.commands.get(command).execute(client, msg, args);
+    if(command == 'ping') return client.commands.get(command).execute(client, msg, args);
+    if(command == 'invite') return client.commands.get(command).execute(client, msg, args);
+    if(command == 'help') return client.commands.get(command).execute(client, msg, args);
+    if(command == 'restart' && msg.author.id === cfg.botinfo.ownerid) return client.commands.get(command).execute(client, msg, args);
+    if(command == 'eval' && msg.author.id === cfg.botinfo.ownerid) return client.commands.get(command).execute(client, msg, args);
+  }catch(e){
+    console.log(e)
+    msg.guild.channels.cache.get(cfg.botinfo.error_channel).send(`\`\`\`javascript\n${require('util').inspect(e)}\`\`\``);
+  }
 
-  if(msg.content.toLowerCase() === `${cfg.bot.prefix}ping`) return msg.channel.send(`Pong! ${client.ws.ping}ms`);
-  if(msg.content.toLowerCase() === `${cfg.bot.prefix}shutdown` && msg.author.id === cfg.botinfo.ownerid) return process.exit(1);
-  
   if(msg.content.toLowerCase() === 'f' && !msg.author.bot){
       //If client.database doesnt exist that means our database isnt connected
       if(!client.database) return msg.reply('Error: Database not connected! Please contact TXJ#0001')
@@ -157,7 +137,7 @@ client.on('message', async msg => {
       })
       console.log(`Guild - ${msg.guild.name} : user - ${msg.author.tag} : fcount - ${fcount}`)
 
-      //New Embed Format! POGGERS
+
       msg.channel.send(new Discord.MessageEmbed()
       .setTitle('Respect Found')
       .setDescription(`<@${msg.author.id}> has paid their respects. :pray: :regional_indicator_f:`)
