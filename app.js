@@ -25,12 +25,43 @@ function connectDB() {
 //Create command object structure
 client.commands = new Discord.Collection();
 
-//Load in <command>.js files and map to client.commands
+//Load in <command>.js files and map to client.commands.
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	client.commands.set(command.name, command);
+
+// Load command functions (run on start)
+async function loadCommands () {
+  for (const file of commandFiles) {
+    const command = require(`./commands/${file}`);
+    console.log(`Loading command: ${command.name} - ${command.description}`)
+    client.commands.set(command.name, command);
+  }
 }
+
+// Reload commands
+function reloadCommands (fileName) {
+  const commandsReloaded = []
+  for (const file of commandFiles) {
+    // Check if the file name is correct regardless of extension.
+    if (!fileName) {
+      eval(`delete require.cache[require.resolve('${process.cwd().replace(/[\\]/g, '/')}/commands/${file}')]`)
+      const command = require(`./commands/${file}`);
+      console.log(`Reloading command: ${command.name}`)
+      client.commands.set(command.name, command);
+      commandsReloaded.push(command.name)
+    } else if(fileName === file || `${fileName}.js` === file) {
+      //reload command
+      eval(`delete require.cache[require.resolve('${process.cwd().replace(/[\\]/g, '/')}/commands/${file}')]`)
+      const command = require(`./commands/${file}`);
+      console.log(`Reloading command: ${command.name}`)
+      client.commands.set(command.name, command);
+      commandsReloaded.push(command.name)
+    } 
+  }
+  return commandsReloaded
+}
+
+// can you see the console window at the bottom?
+client.reloadCommands = reloadCommands
 
 //More Logging for the Discord.JS Client
 client.on("warn", info => console.log(info));
@@ -52,22 +83,15 @@ client.on('ready', async () => {
   client.database = await connectDB()
 
   console.log(`${client.user.username} has started, with ${client.users.cache.size} users, in ${client.channels.cache.size} channels of ${client.guilds.cache.size} guilds.`);
-  //Load up command files, later we will make live reloads
-  for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
-    console.log(`Command Loaded: ${command.name} - ${command.description}`);
-  }
+  loadCommands()
 })
 
 
 
 client.on('message', async msg => {
-  const args = msg.content.slice(cfg.bot.prefix.length).split(/ +/);
-  const command = args.shift().toLowerCase();
-
   //check blacklist first and ignore things if they are blocked, this will be way better in the future
   if(blacklist.bannedusers.includes(msg.author.id)) return;
-
+  
   setTimeout(async = () => {
     client.database.collection('messages').insertOne({
       guild_id: msg.guild.id,
@@ -75,22 +99,6 @@ client.on('message', async msg => {
       userid: msg.author.id
     })
   }, 2000)
-
- 
-  //EVAL COMMAND
-  try{
-    if(command == 'info') return client.commands.get(command).execute(client, msg);
-    if(command == 'vote') return client.commands.get(command).execute(msg);
-    if(command == 'ping') return client.commands.get(command).execute(msg, client);
-    if(command == 'invite') return client.commands.get(command).execute(msg);
-    if(command == 'help') return client.commands.get(command).execute(msg);
-    if(command == 'restart' && msg.author.id === cfg.botinfo.ownerid) return client.commands.get(command).execute(msg);
-    if(command == 'eval' && msg.author.id === cfg.botinfo.ownerid) return client.commands.get(command).execute(client, msg, args);
-  }catch(e){
-    msg.reply("Sorry about that, there was an error sending the message, I will report this to my owner and this should be fixed shortly. I apologize.")
-    console.log(e)
-    msg.guild.channels.cache.get(cfg.botinfo.error_channel).send(`\`\`\`javascript\n${require('util').inspect(e)}\`\`\``);
-  }
 
   if(msg.content.toLowerCase() === 'f' && !msg.author.bot){
       //If client.database doesnt exist that means our database isnt connected
@@ -152,6 +160,21 @@ client.on('message', async msg => {
         //   .addField('Channel ID Missing Permissions:', `\`${msg.channel.id}\``, false)
         //   .addField('User Requested', `\`${msg.author.tag}\``, false)
         // ))
+  }
+  const prefix = msg.content.substr(0, cfg.bot.prefix.length)
+  if(prefix !== cfg.bot.prefix) return;
+  const contentSplit = msg.content.substr(cfg.bot.prefix.length).replace(/[ ]/g, ' ').split(" ")
+  const command = contentSplit[0].toLowerCase();
+  const commandArgs = contentSplit.splice(1)
+  console.log(prefix, command, commandArgs)
+  try{
+    const commandToRun = client.commands.get(command)
+    if(!commandToRun) return
+    else return commandToRun.execute(client, msg, commandArgs);
+  }catch(e){
+    msg.reply("Sorry about that, there was an error sending the message, I will report this to my owner and this should be fixed shortly. I apologize.")
+    console.log(e)
+    msg.guild.channels.cache.get(cfg.botinfo.error_channel).send(`\`\`\`javascript\n${require('util').inspect(e)}\`\`\``);
   }
 })
 
