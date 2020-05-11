@@ -15,7 +15,7 @@ function formatBytes(bytes){
 module.exports = {
 	name: 'info',
 	description: 'Returns process information on the bot like uptime, guilds etc.',
-	execute(client, msg, args) {
+	execute(client, msg) {
         msg.channel.send(
             new Discord.MessageEmbed()
             .setTitle('Statistics')
