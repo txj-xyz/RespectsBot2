@@ -154,7 +154,7 @@ client.on('message', async msg => {
     ))
   }
 
-  //Call commands here
+  //Call command handler here
   const prefix = msg.content.substr(0, cfg.bot.prefix.length)
   if(prefix !== cfg.bot.prefix) return;
   const contentSplit = msg.content.substr(cfg.bot.prefix.length).replace(/[ ]/g, ' ').split(" ")
