@@ -5,6 +5,6 @@ module.exports = {
 	name: 'ping',
 	description: 'Ping the websocket!',
 	execute(client, msg) {
-		msg.channel.send(`Pong! ${client.ws.ping}ms`)
+		msg.channel.send({ embed : { description: `🏓 Pong! ${client.ws.ping}ms` } })
 	},
 };

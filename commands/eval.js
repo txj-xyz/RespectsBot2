@@ -5,7 +5,7 @@ module.exports = {
 	name: 'eval',
 	description: 'Runs javascript as the discord bot client.',
 	async execute(client, msg, args) {
-		//console.log(msg)
+		console.log(msg)
 		let code = args.join(" ");
         const embed = new Discord.MessageEmbed();
         if (msg.author.id !== `189238841054461952`) {
@@ -13,7 +13,7 @@ module.exports = {
         }
         
         if (!code) {
-            return msg.reply(`No input provided stopping.`);
+            return msg.reply(`No input provided`);
         }
 
         if (code.toLowerCase().includes(`api`) || code.toLowerCase().includes(`config`)) {
@@ -21,35 +21,39 @@ module.exports = {
         }
 
         try {
-            let evaled = clean(await eval(code)), output;
-            output = `📤 Output`;
-
+            let evaled = clean(await eval(code)),
+                output;
+            if (evaled.constructor.name === `Promise`) {
+                output = `📤 Output (Promise)`;
+            } else {
+                output = `📤 Output`;
+            }
             if (evaled.length > 800) {
                 evaled = evaled.substring(0, 800) + `...`;
             }
             embed
                 .addField(`📥 Input`, `\`\`\`\n${code}\n\`\`\``)
-                .addField(output, `\`\`\`javascript\n${evaled}\n\`\`\``)
+                .addField(output, `\`\`\`xl\n${evaled}\n\`\`\``)
                 .addField(`Status`, `Success`);
-            return console.log(embed);
+            return msg.channel.send(embed);
         }
         catch (err) {
             console.log(err.stack)
             embed
                 .addField(`📥 Input`, `\`\`\`\n${code}\n\`\`\``)
-                .addField(`📤 Output`, `\`\`\`javascript\n${err.stack}\n\`\`\``)
+                .addField(`📤 Output`, `\`\`\`xl\n${err.stack}\n\`\`\``)
                 .addField(`Status`, `Failed`);
-            return console.log(embed);
+            return msg.channel.send(embed);
         }
         
         function clean(text) {
             if (typeof text !== `string`)
                 text = require(`util`).inspect(text, { depth: 0 })
-            let rege = new RegExp(config.bot.token, "gi");
-            text = text
-                .replace(/`/g, `\`` + String.fromCharCode(8203))
-                .replace(/@/g, `@` + String.fromCharCode(8203))
-                .replace(rege, `For security reasons I cannot show this.`)
+            let rege = new RegExp(config.token, "gi");
+            // text = text
+            //     .replace(/`/g, `\`` + String.fromCharCode(8203))
+            //     .replace(/@/g, `@` + String.fromCharCode(8203))
+            //     .replace(rege, `For security reasons I cannot show this.`)
             return text;
         }
 	},
