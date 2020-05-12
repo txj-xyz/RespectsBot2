@@ -33,7 +33,7 @@ module.exports = {
             }
             embed
                 .addField(`📥 Input`, `\`\`\`\n${code}\n\`\`\``)
-                .addField(output, `\`\`\`xl\n${evaled}\n\`\`\``)
+                .addField(output, `\`\`\`js\n${evaled}\n\`\`\``)
                 .addField(`Status`, `Success`);
             return msg.channel.send(embed);
         }
@@ -41,7 +41,7 @@ module.exports = {
             console.log(err.stack)
             embed
                 .addField(`📥 Input`, `\`\`\`\n${code}\n\`\`\``)
-                .addField(`📤 Output`, `\`\`\`xl\n${err.stack}\n\`\`\``)
+                .addField(`📤 Output`, `\`\`\`js\n${err.stack}\n\`\`\``)
                 .addField(`Status`, `Failed`);
             return msg.channel.send(embed);
         }
