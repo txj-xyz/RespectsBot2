@@ -61,11 +61,6 @@ function reloadCommands (fileName) {
 }
 client.reloadCommands = reloadCommands
 
-//More Logging for the Discord.JS Client
-client.on("warn", info => console.log(info));
-client.on("error", console.error);
-
-
 client.on("guildCreate", guild => {
   console.log("Joined a new guild: " + guild.name);
 })
@@ -78,7 +73,7 @@ client.on('ready', async () => {
 
   //set game for the bot so we can inform users of the help command :poggers:
   setInterval(async () => {
-    client.user.setPresence({ activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | rb!help` } })
+    await client.user.setPresence({ activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | rb!help` } })
   }, 1800000)
   
 
@@ -88,20 +83,22 @@ client.on('ready', async () => {
     .catch(e => console.log(`Error posting stats: ${e}`))
   }, 1800000)
 
-  //assign mongodb cursor to client.database for use elsewhere
   client.database = await connectDB()
 
-  console.log(`${client.user.username} has started, with ${client.users.cache.size} users, in ${client.channels.cache.size} channels of ${client.guilds.cache.size} guilds.`);
+  //Load our commands into Discord.Client();
   loadCommands()
-  //random comment test
+
+  console.log(`${client.user.username} has started, with ${client.users.cache.size} users, in ${client.channels.cache.size} channels of ${client.guilds.cache.size} guilds with ${client.commands.size} commands.`);
 })
 
 
 
 client.on('message', async msg => {
-  //check blacklist first and ignore things if they are blocked, this will be way better in the future
-  if(blacklist.bannedusers.includes(msg.author.id)) return;
+
+  //If the person asking for a command is banned, ignore them and or if the user is a bot.
+  if(blacklist.bannedusers.includes(msg.author.id) || msg.author.bot) return;
   
+  //Wait 2 seconds to start our stats collection
   setTimeout(async = () => {
     client.database.collection('messages').insertOne({
       guild_id: msg.guild.id,
@@ -111,59 +108,11 @@ client.on('message', async msg => {
     })
   }, 2000)
 
-  if(msg.content.toLowerCase() === 'f' && !msg.author.bot){
-    //If client.database doesnt exist that means our database isnt connected
-    if(!client.database) return msg.reply('Error: Database not connected! Please contact TXJ#0001')
 
-    //Check to make sure they exist in the database
-    let guildEntry = await client.database.collection('guilds').findOne({guild_id: msg.guild.id})
-    let fcount = 0
 
-    //If the guild doesn't exist dont make them a new object and assign fcount to 1
-    if(!guildEntry) {
-      await client.database.collection('guilds').insertOne({
-        guild_id: msg.guild.id,
-        fcount: 1
-      })
-      fcount = 1
-    }
 
-    //If they do modify the object fcount++
-    else {
-      await client.database.collection('guilds').updateOne({
-        guild_id: msg.guild.id
-      }, {
-        $set: { fcount: guildEntry.fcount + 1 }
-      })
-      
-      fcount = guildEntry.fcount + 1
-    }
-  
-    let allEntries = await client.database.collection('guilds').find({}).toArray()
-    let total = 0;
-    allEntries.forEach(e => {
-      total += e.fcount
-    })
-    console.log(`Guild - ${msg.guild.name} : user - ${msg.author.tag} : fcount - ${fcount}`)
+  if(msg.content.toLowerCase() === 'f') return client.commands.get("f").execute(client, msg)
 
-    msg.channel.send(new Discord.MessageEmbed()
-    .setTitle('Respect Found')
-    .setDescription(`<@${msg.author.id}> has paid their respects. :pray: :regional_indicator_f:`)
-    .setColor('#003cff')
-    .setTimestamp()
-    .addField('Server Respects', `\`${fcount}\``, true)
-    .addField('Total Respects', `\`${total}\``, true)
-    ).catch(e => client.channels.cache.get(cfg.botinfo.error_channel).send(
-      new Discord.MessageEmbed()
-      .setColor('#ff0000')
-      .setTimestamp()
-      .addField('Error Dump', `\`\`\`${util.inspect(e)}\`\`\``, false)
-      .addField('Channel ID', `\`${msg.channel.id}\``, false)
-      .addField('Guild ID', `\`${msg.guild.id}\``, false)
-      .addField('User Requested', `\`${msg.author.tag}\``, false)
-      .addField('User ID', `\`${msg.author.id}\``, false)
-    ))
-  }
 
   //Call command handler here
   const prefix = msg.content.substr(0, cfg.bot.prefix.length)
@@ -172,25 +121,26 @@ client.on('message', async msg => {
   const command = contentSplit[0].toLowerCase();
   const commandArgs = contentSplit.splice(1)
   console.log(prefix, command, commandArgs)
+
   try{
-    const commandToRun = client.commands.get(command)
-    //Log command to your logging channel.
+    //Log command to channel when used.
     client.channels.cache.get(cfg.botinfo.command_log_channel).send(
       new Discord.MessageEmbed()
-        .setColor('#d2eb34')
-        .setTimestamp()
-        .setDescription(`*${command}* command used.\n\n`+
-          `**Command**: \`${command}\`\n`+
-          `**User**: \`${msg.author.tag}\`\n`+
-          `**User ID**: \`${msg.author.id}\`\n`+
-          `**Channel ID**: \`${msg.channel.id}\``
-        )
+      .setColor('#d2eb34')
+      .setTimestamp()
+      .setDescription(`*${command}* command used.\n\n`+
+        `**Command**: \`${command}\`\n`+
+        `**User**: \`${msg.author.tag}\`\n`+
+        `**User ID**: \`${msg.author.id}\`\n`+
+        `**Channel ID**: \`${msg.channel.id}\``
+      )
     )
+    const commandToRun = client.commands.get(command)
     if(!commandToRun) return
     else return commandToRun.execute(client, msg, commandArgs);
   }catch(e){
     msg.reply("Sorry about that, there was an error sending the message, I will report this to my owner and this should be fixed shortly. I apologize.")
-    console.log(e)
+    console.log(`Error with executing command:\n`, e)
     msg.guild.channels.cache.get(cfg.botinfo.error_channel).send(`\`\`\`javascript\n${require('util').inspect(e)}\`\`\``);
   }
 })

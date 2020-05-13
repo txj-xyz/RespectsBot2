@@ -41,7 +41,7 @@ module.exports = {
             console.log(err.stack)
             embed
                 .addField(`📥 Input`, `\`\`\`\n${code}\n\`\`\``)
-                .addField(`📤 Output`, `\`\`\`js\n${err.stack}\n\`\`\``)
+                .addField(`📤 Output`, `\`\`\`js\n${err}\n\`\`\``)
                 .addField(`Status`, `Failed`);
             return msg.channel.send(embed);
         }

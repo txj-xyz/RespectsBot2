@@ -11,7 +11,7 @@ module.exports = {
                         .setColor('#ffff4f')
                         .setTimestamp()
                         .setDescription(
-                        `If you would like to pay your respects:tm: simply type "f"\n\n`
+                        `If you would like to pay your respects:tm: simply type "f" or type "rb!f"\n\n`
                         +`\`${cfg.bot.prefix}ping\` - Ping the websocket!\n`
                         +`\`${cfg.bot.prefix}info\` - Returns process information on the bot like uptime, guilds etc.\n`
                         +`\`${cfg.bot.prefix}vote\` - Vote for the bot and support me!\n`

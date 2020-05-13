@@ -1,7 +1,6 @@
 const Discord = require('discord.js')
 const cfg = require("../config/config.json")
 const DBL = require("dblapi.js")
-const util = require('util')
 
 module.exports = {
 	name: 'vote',
