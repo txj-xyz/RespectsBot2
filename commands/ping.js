@@ -1,10 +1,14 @@
-const Discord = require('discord.js')
-const cfg = require("../config/config.json")
+const Discord = require('discord.js');
+const cfg = require("../config/config.json");
 
 module.exports = {
-	name: 'ping',
-	description: 'Ping the websocket!',
-	execute(client, msg) {
-		msg.channel.send({ embed : { description: `🏓 Pong! ${client.ws.ping}ms` } })
-	},
+    name: 'ping',
+    description: 'Ping the websocket!',
+    async execute(client, msg) {
+		const embed = new Discord.MessageEmbed().setDescription(`Loading response...`).setTimestamp()
+		let loading = await msg.channel.send(embed);
+		embed.setDescription(`🏓 Pong! ${client.ws.ping}ms`)
+
+		await loading.edit(embed);
+    },
 };
