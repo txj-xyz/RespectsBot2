@@ -103,6 +103,7 @@ client.on('message', async msg => {
   setTimeout(async = () => {
     client.database.collection('messages').insertOne({
       guild_id: msg.guild.id,
+      guild_name: msg.guild.name,
       username: msg.author.tag,
       userid: msg.author.id
     })
