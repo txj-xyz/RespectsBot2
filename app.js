@@ -62,10 +62,34 @@ function reloadCommands (fileName) {
 client.reloadCommands = reloadCommands
 
 client.on("guildCreate", guild => {
+  client.channels.cache.get("710275684794236964").send(
+    new Discord.MessageEmbed()
+    .setColor('#26ff00')
+    .setTimestamp()
+    .setTitle(`Joined Guild!`)
+    .addField(`Guild Name`, guild.name, false)
+    .addField(`Guild ID`, guild.id, false)
+    .addField(`Member Count`, guild.memberCount - 1, true)
+    .addField("Humans", `${guild.members.cache.filter(member => !member.user.bot).size} `, true)
+    .addField("Bots", `${guild.members.cache.filter(member => member.user.bot).size}` - 1, true)
+    .addField(`Owner`, `${guild.owner.user.tag}[${guild.owner.id}]`, false)
+  );
   console.log("Joined a new guild: " + guild.name);
 })
 
 client.on("guildDelete", guild => {
+  client.channels.cache.get("710275684794236964").send(
+    new Discord.MessageEmbed()
+    .setColor('#ff0000')
+    .setTimestamp()
+    .setTitle(`Left Guild!`)
+    .addField(`Guild Name`, guild.name, false)
+    .addField(`Guild ID`, guild.id, false)
+    .addField(`Member Count`, guild.memberCount - 1, true)
+    .addField("Humans", `${guild.members.cache.filter(member => !member.user.bot).size} `, true)
+    .addField("Bots", `${guild.members.cache.filter(member => member.user.bot).size}` - 1, true)
+    .addField(`Owner`, `${guild.owner.user.tag}[${guild.owner.id}]`, false)
+  );
   console.log("Left a guild: " + guild.name);
 })
 
@@ -107,9 +131,6 @@ client.on('message', async msg => {
       userid: msg.author.id
     })
   }, 2000)
-
-
-
 
   if(msg.content.toLowerCase() === 'f') return client.commands.get("f").execute(client, msg)
 

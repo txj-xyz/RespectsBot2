@@ -1,5 +1,6 @@
 const Discord = require('discord.js')
 const cfg = require("../config/config.json")
+const util = require("util")
 
 module.exports = {
 	name: 'f',
