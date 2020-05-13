@@ -68,6 +68,14 @@ client.on("warn", info => console.log(info));
 client.on("error", console.error);
 
 
+client.on("guildCreate", guild => {
+  console.log("Joined a new guild: " + guild.name);
+})
+
+client.on("guildDelete", guild => {
+  console.log("Left a guild: " + guild.name);
+})
+
 client.on('ready', async () => {
 
   //set game for the bot so we can inform users of the help command :poggers:
@@ -163,6 +171,18 @@ client.on('message', async msg => {
   console.log(prefix, command, commandArgs)
   try{
     const commandToRun = client.commands.get(command)
+    //Log command to your logging channel.
+    client.channels.cache.get(cfg.botinfo.command_log_channel).send(
+      new Discord.MessageEmbed()
+        .setColor('#d2eb34')
+        .setTimestamp()
+        .setDescription(`*${command}* command used.\n\n`+
+          `**Command**: \`${command}\`\n`+
+          `**User**: \`${msg.author.tag}\`\n`+
+          `**User ID**: \`${msg.author.id}\`\n`+
+          `**Channel ID**: \`${msg.channel.id}\``
+        )
+    )
     if(!commandToRun) return
     else return commandToRun.execute(client, msg, commandArgs);
   }catch(e){

@@ -1,5 +1,6 @@
 const Discord = require('discord.js')
 const humanizeDuration = require('humanize-duration')
+const cfg = require("../config/config.json")
 
 //Formatting for bytes to KB/MB/GB
 function formatBytes(bytes){

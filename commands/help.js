@@ -4,14 +4,15 @@ const cfg = require("../config/config.json")
 module.exports = {
 	name: 'help',
 	description: 'Shows all commands for the bot',
-	execute(_, msg) {
+	execute(client, msg) {
                 msg.reply(
                         new Discord.MessageEmbed()
                         .setTitle('Respects Bot - Commands')
                         .setColor('#ffff4f')
                         .setTimestamp()
                         .setDescription(
-                        `\`${cfg.bot.prefix}ping\` - Ping the websocket!\n`
+                        `If you would like to pay your respects:tm: simply type "f"\n\n`
+                        +`\`${cfg.bot.prefix}ping\` - Ping the websocket!\n`
                         +`\`${cfg.bot.prefix}info\` - Returns process information on the bot like uptime, guilds etc.\n`
                         +`\`${cfg.bot.prefix}vote\` - Vote for the bot and support me!\n`
                         +`\`${cfg.bot.prefix}help\` - Shows this page!\n`
@@ -25,7 +26,7 @@ module.exports = {
                         +`\`${cfg.bot.prefix}stop\` - Stop the current song.\n`
                         +`\`${cfg.bot.prefix}remove\` - Remove a song from the music queue.\n`
                         )
-                        .setFooter(`${cfg.botinfo.owner}`)
+                        .setFooter(`Owner: ${cfg.botinfo.owner}`)
                 )
 	},
 };
