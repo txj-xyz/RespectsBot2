@@ -92,6 +92,7 @@ client.on('ready', async () => {
 
   console.log(`${client.user.username} has started, with ${client.users.cache.size} users, in ${client.channels.cache.size} channels of ${client.guilds.cache.size} guilds.`);
   loadCommands()
+  //random comment test
 })
 
 
