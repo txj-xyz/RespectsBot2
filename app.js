@@ -55,12 +55,10 @@ function reloadCommands (fileName) {
       console.log(`Reloading command: ${command.name}`)
       client.commands.set(command.name, command);
       commandsReloaded.push(command.name)
-    } 
+    }
   }
   return commandsReloaded
 }
-
-// can you see the console window at the bottom?
 client.reloadCommands = reloadCommands
 
 //More Logging for the Discord.JS Client
@@ -79,7 +77,10 @@ client.on("guildDelete", guild => {
 client.on('ready', async () => {
 
   //set game for the bot so we can inform users of the help command :poggers:
-  client.user.setPresence({ activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | rb!help` } })
+  setInterval(async () => {
+    client.user.setPresence({ activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | rb!help` } })
+  }, 1800000)
+  
 
   //This really isn't needed if you are not using "top.gg" DBL.
   setInterval(async () => {

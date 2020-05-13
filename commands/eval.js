@@ -48,7 +48,7 @@ module.exports = {
         
         function clean(text) {
             if (typeof text !== `string`)
-                text = require(`util`).inspect(text, { depth: 0 })
+                text = require(`util`).inspect(text)
             let rege = new RegExp(config.token, "gi");
             // text = text
             //     .replace(/`/g, `\`` + String.fromCharCode(8203))
