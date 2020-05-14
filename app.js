@@ -4,8 +4,10 @@ const DBL = require("dblapi.js")
 const blacklist = require("./config/userblocklist.json")
 const fs = require('fs');
 const util = require('util');
-
 const client = new Discord.Client()
+
+client.resource = require("./resource/util.js")
+
 //Create DBL API Post, This is not needed if you do not use top.gg
 const dbl = new DBL(cfg.bot.dblToken, client)
 
@@ -61,9 +63,9 @@ function reloadCommands (fileName) {
 }
 client.reloadCommands = reloadCommands
 
-client.on("guildCreate", guild => {
+client.on("guildCreate", async (guild) => {
   client.channels.cache.get("710275684794236964").send(
-    new Discord.MessageEmbed()
+    client.resource.embed()
     .setColor('#26ff00')
     .setTimestamp()
     .setTitle(`Joined Guild!`)
@@ -77,9 +79,9 @@ client.on("guildCreate", guild => {
   console.log("Joined a new guild: " + guild.name);
 })
 
-client.on("guildDelete", guild => {
+client.on("guildDelete", async (guild) => {
   client.channels.cache.get("710275684794236964").send(
-    new Discord.MessageEmbed()
+    client.resource.embed()
     .setColor('#ff0000')
     .setTimestamp()
     .setTitle(`Left Guild!`)
@@ -94,35 +96,25 @@ client.on("guildDelete", guild => {
 })
 
 client.on('ready', async () => {
+  client.database = await connectDB()
+  loadCommands()
+  console.log(`${client.user.username} has started, with ${client.users.cache.size} users, in ${client.channels.cache.size} channels of ${client.guilds.cache.size} guilds with ${client.commands.size} commands.`);
+})
 
-  //set game for the bot so we can inform users of the help command :poggers:
+client.on('ready', async () => {
   setInterval(async () => {
     await client.user.setPresence({ activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | rb!help` } })
   }, 1800000)
-  
-
-  //This really isn't needed if you are not using "top.gg" DBL.
   setInterval(async () => {
-    dbl.postStats(client.guilds.cache.size)
-    .catch(e => console.log(`Error posting stats: ${e}`))
+    await dbl.postStats(client.guilds.cache.size).catch(e => console.log(`Error posting stats: ${e}`))
   }, 1800000)
-
-  client.database = await connectDB()
-
-  //Load our commands into Discord.Client();
-  loadCommands()
-
-  console.log(`${client.user.username} has started, with ${client.users.cache.size} users, in ${client.channels.cache.size} channels of ${client.guilds.cache.size} guilds with ${client.commands.size} commands.`);
 })
 
 
 
 client.on('message', async msg => {
-
-  //If the person asking for a command is banned, ignore them and or if the user is a bot.
   if(blacklist.bannedusers.includes(msg.author.id) || msg.author.bot) return;
-  
-  //Wait 2 seconds to start our stats collection
+
   setTimeout(async = () => {
     client.database.collection('messages').insertOne({
       guild_id: msg.guild.id,
@@ -134,8 +126,6 @@ client.on('message', async msg => {
 
   if(msg.content.toLowerCase() === 'f') return client.commands.get("f").execute(client, msg)
 
-
-  //Call command handler here
   const prefix = msg.content.substr(0, cfg.bot.prefix.length)
   if(prefix !== cfg.bot.prefix) return;
   const contentSplit = msg.content.substr(cfg.bot.prefix.length).replace(/[ ]/g, ' ').split(" ")
@@ -144,9 +134,8 @@ client.on('message', async msg => {
   console.log(prefix, command, commandArgs)
 
   try{
-    //Log command to channel when used.
     client.channels.cache.get(cfg.botinfo.command_log_channel).send(
-      new Discord.MessageEmbed()
+      client.resource.embed()
       .setColor('#d2eb34')
       .setTimestamp()
       .setDescription(`*${command}* command used.\n\n`+

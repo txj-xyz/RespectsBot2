@@ -16,21 +16,22 @@ function formatBytes(bytes){
 module.exports = {
 	name: 'info',
 	description: 'Returns process information on the bot like uptime, guilds etc.',
-	execute(client, msg) {
-        msg.channel.send(
-            new Discord.MessageEmbed()
-            .setTitle('Statistics')
-            .setColor('#fcebb3')
-            .setTimestamp()
-            .setFooter(msg.author.tag)
-            .addField('Users', `\`${client.users.cache.size}\``, true)
-            .addField('Guilds', `\`${client.guilds.cache.size}\``, true)
-            .addField('Language', '`NodeJS`', true)
-            .addField('RAM', `\`${formatBytes(process.memoryUsage().rss)}\`/\`8GB\``, true)
-            //.addField('Shards', `\`${parseInt(client.options.shards) + 1}\``, true)
-            .addField('Ping', `\`${client.ws.ping}ms\``, true)
-            .addField('Uptime', `\`${humanizeDuration(client.uptime)}\``, true)
-            .addField('Developer', '`TXJ#0001`', true)
+	async execute(client, msg) {
+        let loading = await msg.channel.send(client.resource.loading())
+        
+        loading.edit(client.resource.embed()
+        .setTitle('Statistics')
+        .setColor('#fcebb3')
+        .setTimestamp()
+        .setFooter(msg.author.tag)
+        .addField('Users', `\`${client.users.cache.size}\``, true)
+        .addField('Guilds', `\`${client.guilds.cache.size}\``, true)
+        .addField('Language', '`NodeJS`', true)
+        .addField('RAM', `\`${formatBytes(process.memoryUsage().rss)}\`/\`8GB\``, true)
+        //.addField('Shards', `\`${parseInt(client.options.shards) + 1}\``, true)
+        .addField('Ping', `\`${client.ws.ping}ms\``, true)
+        .addField('Uptime', `\`${humanizeDuration(client.uptime)}\``, true)
+        .addField('Developer', '`TXJ#0001`', true)
         )
 	},
 };

@@ -29,22 +29,23 @@ module.exports = {
         allEntries.forEach(e => {
             total += e.fcount
         })
-        msg.channel.send(new Discord.MessageEmbed()
-        .setTitle('Respect Found')
-        .setDescription(`<@${msg.author.id}> has paid their respects. :pray: :regional_indicator_f:`)
-        .setColor('#003cff')
-        .setTimestamp()
-        .addField('Server Respects', `\`${fcount}\``, true)
-        .addField('Total Respects', `\`${total}\``, true)
-        ).catch(e => client.channels.cache.get(cfg.botinfo.error_channel).send(
-          new Discord.MessageEmbed()
-          .setColor('#ff0000')
-          .setTimestamp()
-          .addField('Error Dump', `\`\`\`${util.inspect(e)}\`\`\``, false)
-          .addField('Channel ID', `\`${msg.channel.id}\``, false)
-          .addField('Guild ID', `\`${msg.guild.id}\``, false)
-          .addField('User Requested', `\`${msg.author.tag}\``, false)
-          .addField('User ID', `\`${msg.author.id}\``, false)
+        msg.channel.send(
+            client.resource.embed()
+                .setTitle('Respect Found')
+                .setDescription(`<@${msg.author.id}> has paid their respects. :pray: :regional_indicator_f:`)
+                .setColor('#003cff')
+                .setTimestamp()
+                .addField('Server Respects', `\`${fcount}\``, true)
+                .addField('Total Respects', `\`${total}\``, true)
+        ).catch(e => client.channels.cache.get(cfg.botinfo.error_channel).send( 
+            client.resource.embed()
+                .setColor('#ff0000')
+                .setTimestamp()
+                .addField('Error Dump', `\`\`\`${util.inspect(e)}\`\`\``, false)
+                .addField('Channel ID', `\`${msg.channel.id}\``, false)
+                .addField('Guild ID', `\`${msg.guild.id}\``, false)
+                .addField('User Requested', `\`${msg.author.tag}\``, false)
+                .addField('User ID', `\`${msg.author.id}\``, false)
         ))
 	},
 };
