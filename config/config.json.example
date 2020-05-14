@@ -1,13 +1,15 @@
 {
     "bot" : {
-        "prefix":"<prefix>",
+        "prefix": "<prefix>",
         "token": "<bot_token>",
         "dblToken": "<discord_bot_listing_api_token>"
     },
     "botinfo" : {
-        "invite_url":<invite_url>",
-        "music_status":"<emoji_for_status>",
-        "error_channel":"<channel_id>",
+        "invite_url": "<invite_url>",
+        "music_status": "<emoji_for_status>",
+        "error_channel": "<channel_id>",
+        "command_log_channel": "<channel_id>",
+        "guild_log_channel": "<channel_id>",
         "owner" : "<owner_tag>",
         "ownerid" : "<owner_userID>"
     },
