@@ -1,6 +1,4 @@
-const Discord = require('discord.js')
-const cfg = require("../config/config.json")
-const util = require("util")
+const limiter = new Set();
 
 module.exports = {
 	name: 'f',
@@ -24,15 +22,21 @@ module.exports = {
         let allEntries = await client.database.collection('guilds').find({}).toArray()
         let total = 0;
         allEntries.forEach(e => { total += e.fcount })
-        let loading = await msg.channel.send(client.resource.loading())
-        loading.edit(client.resource.embed()
+
+        //Ratelimiting until I can put this into the DB structure.
+        if(limiter.has(msg.author.id)) return;
+        msg.channel.send(
+            client.resource.embed()
             .setTitle('Respect Found')
             .setDescription(`<@${msg.author.id}> has paid their respects. :pray: :regional_indicator_f:`)
             .setColor('#003cff')
             .setTimestamp()
             .addField('Server Respects', `\`${fcount}\``, true)
             .addField('Total Respects', `\`${total}\``, true)
-        );
+        )
+        limiter.add(msg.author.id);
+        setTimeout(() => { limiter.delete(msg.author.id); }, 250);
+
         // msg.channel.send(
         //     client.resource.embed()
         //         .setTitle('Respect Found')
