@@ -8,9 +8,6 @@ const DBL = require("dblapi.js")
 const client = new Discord.Client()
 const dbl = new DBL(cfg.bot.dblToken, client)
 
-const logChannel = client.channels.cache.get(cfg.botinfo.command_log_channel)
-const errChannel = client.channels.cache.get(cfg.botinfo.error_channel)
-
 client.resource = require("./resource/embeds.js")
 client.commands = new Discord.Collection();
 
@@ -65,38 +62,43 @@ function reloadCommands (fileName) {
 client.reloadCommands = reloadCommands
 
 client.on("guildDelete", async (guild) => {
-  let loading = await logChannel.send(client.resource.loading())
-  logChannel.send(loading.edit(client.resource.leaveEmbed(guild)));
+  //let loading = await client.channels.cache.get(cfg.botinfo.guild_log_channel).send(client.resource.loading())
+  client.channels.cache.get(cfg.botinfo.guild_log_channel).send(client.resource.leaveEmbed(guild));
+
+  setTimeout(async () => {
+    client.user.setPresence({ activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | rb!help` } })
+  }, 2000)
 })
 client.on("guildCreate", async (guild) => {
-  let loading = await logChannel.send(client.resource.loading())
-  logChannel.send(loading.edit(client.resource.joinEmbed(guild)));
+  //let loading = await client.channels.cache.get(cfg.botinfo.guild_log_channel).send(client.resource.loading())
+  client.channels.cache.get(cfg.botinfo.guild_log_channel).send(client.resource.joinEmbed(guild));
+
+  setTimeout(async () => {
+    client.user.setPresence({ activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | rb!help` } })
+  }, 2000)
+  
 })
 
 client.on('ready', async () => {
   client.database = await connectDB()
   loadCommands()
+  client.user.setPresence({ activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | rb!help` } })
 
   setInterval(async () => {
-    await client.user.setPresence({ activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | rb!help` } })
-  }, 1800000)
-  setInterval(async () => {
-    await dbl.postStats(client.guilds.cache.size).catch(e => console.log(`Error posting stats: ${e}`))
+    dbl.postStats(client.guilds.cache.size).catch(e => console.log(`Error posting stats: ${e}`))
   }, 1800000)
 
   console.log(`${client.user.username} has started, with ${client.users.cache.size} users, in ${client.channels.cache.size} channels of ${client.guilds.cache.size} guilds with ${client.commands.size} commands.`);
 })
 
 client.on('message', async msg => {
-  const logChannel = client.channels.cache.get(cfg.botinfo.command_log_channel)
-  const errChannel = client.channels.cache.get(cfg.botinfo.error_channel)
   if(blacklist.bannedusers.includes(msg.author.id) || msg.author.bot) return;
 
   setTimeout(async = () => {
     client.database.collection('messages').insertOne({guild_id: msg.guild.id, guild_name: msg.guild.name, username: msg.author.tag, userid: msg.author.id})
   }, 2000)
 
-  if(msg.content.toLowerCase() === 'f') return client.commands.get("f").execute(client, msg)
+  if(msg.content.toLowerCase() === 'f' || msg.content.toLowerCase() === '🇫') return client.commands.get("f").execute(client, msg)
 
   const prefix = msg.content.substr(0, cfg.bot.prefix.length)
   if(prefix !== cfg.bot.prefix) return;
@@ -105,7 +107,7 @@ client.on('message', async msg => {
   const commandArgs = contentSplit.splice(1)
 
   try{
-    logChannel.send(client.resource.cmdUsedEmbed(command, msg, commandArgs))
+    client.channels.cache.get(cfg.botinfo.command_log_channel).send(client.resource.cmdUsedEmbed(command, msg, commandArgs))
     const commandToRun = client.commands.get(command)
     if(!commandToRun) return
     else return commandToRun.execute(client, msg, commandArgs);

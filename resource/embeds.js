@@ -4,8 +4,10 @@ module.exports = {
     //Setup embed structure here for base layout after edit.
     embed(color) {
         const embed = new Discord.MessageEmbed()
+        .setTimestamp()
         if (color) {
-            embed.setColor(`${color}`)
+            embed
+            .setColor(`${color}`)
         }
         return embed;
     },
@@ -15,8 +17,7 @@ module.exports = {
     },
     leaveEmbed(guild){
         const embed = new Discord.MessageEmbed()
-        .setColor('#26ff00')
-        .setTimestamp()
+        .setColor('#ff0000')
         .setTitle(`Left Guild!`)
         .addField(`Guild Name`, guild.name, false)
         .addField(`Guild ID`, guild.id, false)
@@ -29,7 +30,6 @@ module.exports = {
     joinEmbed(guild){
         const embed = new Discord.MessageEmbed()
         .setColor('#26ff00')
-        .setTimestamp()
         .setTitle(`Join Guild!`)
         .addField(`Guild Name`, guild.name, false)
         .addField(`Guild ID`, guild.id, false)
@@ -42,7 +42,6 @@ module.exports = {
     cmdUsedEmbed(command, msg, commandArgs){
         const embed = new Discord.MessageEmbed()
         .setColor('#d2eb34')
-        .setTimestamp()
         .setDescription(
         `**${command}** command used.\n\n`+
         //`**Args: \`${commandArgs}\`\n`+
