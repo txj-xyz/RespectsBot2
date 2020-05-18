@@ -20,7 +20,8 @@ module.exports = {
         
         //Get total respect count
         let allEntries = await client.database.collection('guilds').find({}).toArray()
-        let total = 120000;
+        //Again set base total to the entry BEFORe I moved to a DB.
+        let total = 57548;
         allEntries.forEach(e => { total += e.fcount })
 
         loading.edit(client.resource.embed()
@@ -35,11 +36,11 @@ module.exports = {
 
         .addField('RAM Used', `\`${formatBytes(process.memoryUsage().rss)}\``, true)
         .addField('Ping', `\`${client.ws.ping}ms\``, true)
-        .addField('Messages', `**${msgCount}**`, true)
+        .addField('Messages', `**${msgCount.toLocaleString()}**`, true)
 
         .addField('🇫 Ratelimit', `\`1000ms\``, true)
         .addField('Developer', '`TXJ#0001`', true)
-        .addField('Total Respects', `**${total}**`, true)
+        .addField('Total Respects', `**${total.toLocaleString()}**`, true)
         
         //.addField('Shards', `\`${parseInt(client.options.shards) + 1}\``, true)
         )
