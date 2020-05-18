@@ -1,6 +1,6 @@
 {
   "name": "respectsbot-2",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Responds to the letter F",
   "main": "app.js",
   "dependencies": {
