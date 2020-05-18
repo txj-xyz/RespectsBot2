@@ -1,5 +1,8 @@
 {
-    "bannedusers":[
-        "userID"
+    "users":[
+        "USERID"
+    ],
+    "guilds":[
+        "GUILDID"
     ]
 }

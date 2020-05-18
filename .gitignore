@@ -3,3 +3,4 @@ config.json
 package_lock.json
 dev_app.js
 userblocklist.json
+blocklist.json

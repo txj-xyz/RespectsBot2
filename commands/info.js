@@ -1,6 +1,4 @@
-const Discord = require('discord.js')
 const humanizeDuration = require('humanize-duration')
-const cfg = require("../config/config.json")
 
 //Formatting for bytes to KB/MB/GB
 function formatBytes(bytes){
@@ -18,20 +16,32 @@ module.exports = {
 	description: 'Returns process information on the bot like uptime, guilds etc.',
 	async execute(client, msg) {
         let loading = await msg.channel.send(client.resource.loading())
+        let msgCount = await client.database.collection('messages').countDocuments()
         
+        //Get total respect count
+        let allEntries = await client.database.collection('guilds').find({}).toArray()
+        let total = 0;
+        allEntries.forEach(e => { total += e.fcount })
+
         loading.edit(client.resource.embed()
         .setTitle('Statistics')
         .setColor('#fcebb3')
         .setTimestamp()
-        .setFooter(msg.author.tag)
+        .setFooter(`Uptime: ${humanizeDuration(client.uptime)}`)
+
         .addField('Users', `\`${client.users.cache.size}\``, true)
         .addField('Guilds', `\`${client.guilds.cache.size}\``, true)
         .addField('Language', '`NodeJS`', true)
-        .addField('RAM', `\`${formatBytes(process.memoryUsage().rss)}\`/\`8GB\``, true)
-        //.addField('Shards', `\`${parseInt(client.options.shards) + 1}\``, true)
+
+        .addField('RAM Used', `\`${formatBytes(process.memoryUsage().rss)}\``, true)
         .addField('Ping', `\`${client.ws.ping}ms\``, true)
-        .addField('Uptime', `\`${humanizeDuration(client.uptime)}\``, true)
+        .addField('Messages', `**${msgCount}**`, true)
+
+        .addField('🇫 Ratelimit', `\`1000ms\``, true)
         .addField('Developer', '`TXJ#0001`', true)
+        .addField('Total Respects', `**${total}**`, true)
+        
+        //.addField('Shards', `\`${parseInt(client.options.shards) + 1}\``, true)
         )
 	},
 };

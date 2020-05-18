@@ -5,12 +5,9 @@ module.exports = {
 	name: 'eval',
 	description: 'Runs javascript as the discord bot client.',
 	async execute(client, msg, args) {
-		console.log(msg)
 		let code = args.join(" ");
         const embed = new Discord.MessageEmbed();
-        if (msg.author.id !== `189238841054461952`) {
-            return msg.reply(`You are not approved to use this`)
-        }
+        if (msg.author.id !== `189238841054461952`) return;
         
         if (!code) {
             return msg.reply(`No input provided`);
@@ -50,10 +47,7 @@ module.exports = {
             if (typeof text !== `string`)
                 text = require(`util`).inspect(text)
             let rege = new RegExp(config.token, "gi");
-            // text = text
-            //     .replace(/`/g, `\`` + String.fromCharCode(8203))
-            //     .replace(/@/g, `@` + String.fromCharCode(8203))
-            //     .replace(rege, `For security reasons I cannot show this.`)
+            if(text == client.token) return text = "Here is your token: [REDACTED]"
             return text;
         }
 	},

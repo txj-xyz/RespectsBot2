@@ -24,7 +24,8 @@ module.exports = {
                         +`\`${cfg.bot.prefix}[volume, vol]\` - Change the volume of the bot on the fly.\n`
                         +`\`${cfg.bot.prefix}pause\` - Pause the current song.\n`
                         +`\`${cfg.bot.prefix}stop\` - Stop the current song.\n`
-                        +`\`${cfg.bot.prefix}remove\` - Remove a song from the music queue.\n`
+                        +`\`${cfg.bot.prefix}remove\` - Remove a song from the music queue.\n\n`
+                        +`**Need more help? Join the support server [here](https://discord.gg/CSJkCGx) or with this link\n<https://discord.gg/CSJkCGx>**`
                         )
                         .setFooter(`Owner: ${cfg.botinfo.owner}`)
                 )
