@@ -12,10 +12,10 @@ module.exports = {
         if (!code) {
             return msg.reply(`No input provided`);
         }
-
-        if (code.toLowerCase().includes(`api`) || code.toLowerCase().includes(`config`)) {
-            return msg.reply(`You do not want to do this!\nA word has triggered the eval command to terminate!`)
-        }
+        // off temp beacuse of testing, not like it matters
+        // if (code.toLowerCase().includes(`api`) || code.toLowerCase().includes(`config`)) {
+        //     return msg.reply(`You do not want to do this!\nA word has triggered the eval command to terminate!`)
+        // }
 
         try {
             let evaled = clean(await eval(code)),
