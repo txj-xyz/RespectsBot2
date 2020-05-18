@@ -12,7 +12,7 @@ module.exports = {
         return embed;
     },
     loading(){
-        const embed = new Discord.MessageEmbed().setTitle(`Loading...`);
+        const embed = new Discord.MessageEmbed().setTitle(`Loading... <a:loading:712019804503933059>`);
         return embed
     },
     leaveEmbed(guild){
