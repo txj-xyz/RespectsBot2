@@ -20,7 +20,7 @@ module.exports = {
         
         //Get total respect count
         let allEntries = await client.database.collection('guilds').find({}).toArray()
-        let total = 0;
+        let total = 120000;
         allEntries.forEach(e => { total += e.fcount })
 
         loading.edit(client.resource.embed()
