@@ -8,7 +8,8 @@
     "discord.js": "^12.1.1",
     "fs": "0.0.1-security",
     "humanize-duration": "^3.22.0",
-    "mongodb": "^3.5.7"
+    "mongodb": "^3.5.7",
+    "superagent": "^5.2.2"
   },
   "author": "TXJ69",
   "license": "ISC"
