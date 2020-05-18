@@ -30,7 +30,8 @@ module.exports = {
         }
 
         let allEntries = await client.database.collection('guilds').find({}).toArray()
-        let total = 120000;
+        //Set base total before I moved over to DB
+        let total = 57548;
         allEntries.forEach(e => { total += e.fcount })
 
         if(blacklist.users.includes(msg.author.id) || blacklist.guilds.includes(msg.guild.id)) return;
