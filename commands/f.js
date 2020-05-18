@@ -1,28 +1,36 @@
 const limiter = new Set();
+const blacklist = require("../config/userblocklist.json")
 
 module.exports = {
 	name: 'f',
 	description: 'Pay your respects!',
 	async execute(client, msg) {
-
+        console.log(`Command: F\n`, `Guild ID: [${msg.guild.id}]\n`, `Guild Name: [${msg.guild.name}]\n`, `Username: ${msg.author.tag}`)
         if(!client.database)return msg.reply('Error: Database not connected! Please contact TXJ#0001')
 
         let guildEntry = await client.database.collection('guilds').findOne({guild_id: msg.guild.id})
         let fcount = 0
         if(!guildEntry) {
-            await client.database.collection('guilds').insertOne({ guild_id: msg.guild.id, fcount: 1 })
+            await client.database.collection('guilds').insertOne({
+                guild_id: msg.guild.id,
+                guild_name: msg.guild.name,
+                fcount: 1
+            })
             fcount = 1
         } else {
             await client.database.collection('guilds').updateOne({
                 guild_id: msg.guild.id
             }, {
-                $set: { fcount: guildEntry.fcount + 1 }
+                $set: {
+                    guild_name: msg.guild.name,
+                    fcount: guildEntry.fcount + 1
+                }
             })
             fcount = guildEntry.fcount + 1
         }
 
         let allEntries = await client.database.collection('guilds').find({}).toArray()
-        let total = 0;
+        let total = 120000;
         allEntries.forEach(e => { total += e.fcount })
 
         if(blacklist.users.includes(msg.author.id) || blacklist.guilds.includes(msg.guild.id)) return;
