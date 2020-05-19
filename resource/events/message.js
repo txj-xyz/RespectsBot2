@@ -2,7 +2,13 @@ const util = require('util');
 
 module.exports = (client, cfg) => {
     client.on('message', async msg => {
-
+        if(!client.database){
+            try{
+                client.database = await connectDB()
+            }catch(e){
+                return console.log(e, 'Error setting client.database')
+            }
+        }
         await client.database;
         client.database.collection('messages').insertOne({guild_id: msg.guild.id, guild_name: msg.guild.name, username: msg.author.tag, userid: msg.author.id})
     
