@@ -1,22 +1,18 @@
-const Discord = require('discord.js')
-const cfg = require("./config/config.json")
-const fs = require('fs');
-const DBL = require("dblapi.js")
-const blacklist = require("./config/userblocklist.json")
+const Discord = require('discord.js'),
+cfg = require("./config/config.json"),
+fs = require('fs'),
+DBL = require("dblapi.js"),
+blacklist = require("./config/blacklist.json"),
+mongo = require("mongodb").MongoClient,
+client = new Discord.Client(),
+dbl = new DBL(cfg.bot.dblToken, client),
+util = require('util'),
+commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
-const client = new Discord.Client()
-const dbl = new DBL(cfg.bot.dblToken, client)
-
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 client.commands = new Discord.Collection();
 client.resource = require("./resource/embeds.js")
 
-
-require("./resource/events/ready.js")(client, cfg, dbl)
-require("./resource/events/message.js")(client, cfg)
-require("./resource/events/guildCreate.js")(client, cfg)
-require("./resource/events/guildDelete.js")(client, cfg)
-require("./resource/command/loadFunc.js")(client, commandFiles, blacklist)
-require("./resource/command/reloadFunc.js")(client, commandFiles)
+require("./resource/events.js")(client, cfg, dbl, mongo, util, blacklist)
+require("./resource/reloadcmd.js")(client, commandFiles)
 
 client.login(cfg.bot.token)
