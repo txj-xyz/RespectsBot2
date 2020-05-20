@@ -1,12 +1,12 @@
 const limiter = new Set();
-const blacklist = require("../config/userblocklist.json")
+const blacklist = require("../config/blacklist.json")
 
 module.exports = {
 	name: 'f',
 	description: 'Pay your respects!',
 	async execute(client, msg) {
         console.log(`Command: F\n`, `Guild ID: [${msg.guild.id}]\n`, `Guild Name: [${msg.guild.name}]\n`, `Username: ${msg.author.tag}`)
-        if(!client.database)return msg.reply('Error: Database not connected! Please contact TXJ#0001')
+        if(!client.database) return msg.reply('Error: Database not connected! Please contact TXJ#0001')
 
         let guildEntry = await client.database.collection('guilds').findOne({guild_id: msg.guild.id})
         let fcount = 0
@@ -30,16 +30,11 @@ module.exports = {
         }
 
         let allEntries = await client.database.collection('guilds').find({}).toArray()
-        //Set base total before I moved over to DB
         let total = 57548;
         allEntries.forEach(e => { total += e.fcount })
 
         if(blacklist.users.includes(msg.author.id) || blacklist.guilds.includes(msg.guild.id)) return;
-
-        //if(msg.guild.id === '264445053596991498') return;
         if(!msg.channel.permissionsFor(client.user.id).has("SEND_MESSAGES")) return;
-        
-        //Ratelimiting until I can put this into the DB structure.
         if(limiter.has(msg.author.id)) return;
 
         msg.channel.send(
