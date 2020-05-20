@@ -34,11 +34,12 @@ module.exports = {
                 .addField(`Status`, `Success`);
             return msg.channel.send(embed);
         }
-        catch (err) {
+        catch (e) {
+            client.resource.cmdErrLogger(client, e, util);
             console.log(err.stack)
             embed
                 .addField(`📥 Input`, `\`\`\`\n${code}\n\`\`\``)
-                .addField(`📤 Output`, `\`\`\`js\n${err}\n\`\`\``)
+                .addField(`📤 Output`, `\`\`\`js\n${e}\n\`\`\``)
                 .addField(`Status`, `Failed`);
             return msg.channel.send(embed);
         }
