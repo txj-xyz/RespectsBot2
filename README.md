@@ -7,13 +7,3 @@
 
  - Clone this repo and use `npm i` to install the dependencies.
  - Start the bot from `app.js`.
-
-## Requirements
-
-```
-"dblapi.js": "^2.4.0",
-"discord.js": "^12.1.1",
-"fs": "0.0.1-security",
-"humanize-duration": "^3.22.0",
-"mongodb": "^3.5.7"
-```
