@@ -1,7 +1,7 @@
 const Discord = require(`discord.js`);
-
-module.exports = {
-    //Setup embed structure here for base layout after edit.
+const cfg = require('../config/config.json')
+module.exports = (client) = {
+    
     embed(color) {
         const embed = new Discord.MessageEmbed()
         .setTimestamp()
@@ -44,11 +44,32 @@ module.exports = {
         .setColor('#d2eb34')
         .setDescription(
         `**${command}** command used.\n\n`+
-        //`**Args: \`${commandArgs}\`\n`+
+        `**Args: \`${commandArgs}\`\n`+
         `**Command**: \`${command}\`\n`+
         `**User**: \`${msg.author.tag}\`\n`+
         `**User ID**: \`${msg.author.id}\`\n`+
         `**Channel ID**: \`${msg.channel.id}\``)
         return embed
+    },
+    cmdErrLogger(client, e, util){
+        client.channels.cache.get(cfg.botinfo.error_channel).send(
+            new Discord.MessageEmbed()
+            .setColor('#d2eb34')
+            .setTitle("Command Error")
+            .setDescription(`\`\`\`js\n${util.inspect(e)}\`\`\``)
+        );
+    },
+    cmdUsedLogger(client, command, commandArgs, msg){
+        client.channels.cache.get(cfg.botinfo.command_log_channel).send(
+            new Discord.MessageEmbed()
+            .setColor('#d2eb34')
+            .setDescription(
+            `**${command}** command used.\n\n`+
+            `**Args: \`${commandArgs}\`\n`+
+            `**Command**: \`${command}\`\n`+
+            `**User**: \`${msg.author.tag}\`\n`+
+            `**User ID**: \`${msg.author.id}\`\n`+
+            `**Channel ID**: \`${msg.channel.id}\``)
+        );
     }
 };
