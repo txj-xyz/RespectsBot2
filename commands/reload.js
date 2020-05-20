@@ -7,12 +7,9 @@ module.exports = {
 		if(msg.author.id != cfg.botinfo.ownerid) return msg.reply("You are not authorized to use this command.")
 		
 		if(args.length === 0) { 
-		  const commandsReloaded = client.reloadCommands()
-		  return msg.channel.send(`Reloaded Commands:\r\n\`\`\`\n${commandsReloaded.join('\n')}\`\`\``)
+		  return msg.channel.send(`Reloaded Commands:\r\n\`\`\`\n${client.reloadCommands(args[0]).join('\n')}\`\`\``)
 		} else { 
-		  const commandsReloaded = client.reloadCommands(args[0]) 
-		  console.log(commandsReloaded)
-		  return msg.channel.send(`Reloaded Commands:\r\n\`\`\`\n${commandsReloaded.join('\n')}\`\`\``)
+		  return msg.channel.send(`Reloaded Commands:\r\n\`\`\`\n${client.reloadCommands(args[0]).join('\n')}\`\`\``)
 		}
 	}
 };
