@@ -2,5 +2,4 @@ config.json
 /node_modules
 package_lock.json
 dev_app.js
-userblocklist.json
-blocklist.json
+blacklist.json
