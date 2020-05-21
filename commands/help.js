@@ -13,15 +13,14 @@ module.exports = {
             .setColor('#ffff4f')
             .setTimestamp()
             .setDescription(
-            `If you would like to pay your respects:tm: simply type "f" or type "rb!f"\n\n`
-            + helpList.join('\n') + `\n`
-            +`**Music Commands** Enabled: ${cfg.botinfo.music_status}\n`
+            `If you would like to pay your respects:tm: simply type "f" or type "rb!f"\n\n**General Commands:**\n`
+            + helpList.join('\n') + `\n\n`
+            +`**Music Commands**\n`
             +`\`${cfg.bot.prefix}[play, p]\` - Play/Resume Music from Youtube.\n`
             +`\`${cfg.bot.prefix}[queue, q]\` - Show the current music queue and what is currently playing.\n`
             +`\`${cfg.bot.prefix}[skip, s]\` - Skip the current song.\n`
             +`\`${cfg.bot.prefix}[volume, vol]\` - Change the volume of the bot on the fly.\n`
             +`\`${cfg.bot.prefix}pause\` - Pause the current song.\n`
-            +`\`${cfg.bot.prefix}stop\` - Stop the current song.\n`
             +`\`${cfg.bot.prefix}remove\` - Remove a song from the music queue.\n\n`
             +`**Need more help? Join the support server [here](https://discord.gg/CSJkCGx) or with this link\n<https://discord.gg/CSJkCGx>**`
             )
