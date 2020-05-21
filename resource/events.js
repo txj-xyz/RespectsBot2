@@ -1,3 +1,4 @@
+const util = require('util')
 
 module.exports = (client, cfg, dbl, mongo, util, blacklist) => {
 

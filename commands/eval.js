@@ -1,5 +1,6 @@
 const Discord = require('discord.js')
 const config = require("../config/config.json")
+const util = require('util')
 
 module.exports = {
 	name: 'eval',
@@ -36,7 +37,7 @@ module.exports = {
         }
         catch (e) {
             client.resource.cmdErrLogger(client, e, util);
-            console.log(err.stack)
+            console.log(e.stack)
             embed
                 .addField(`📥 Input`, `\`\`\`\n${code}\n\`\`\``)
                 .addField(`📤 Output`, `\`\`\`js\n${e}\n\`\`\``)
