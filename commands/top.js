@@ -22,12 +22,12 @@ module.exports = {
         client.database.collection('guilds').find().limit(limitArg).sort({fcount: -1}).toArray(function(err, result) {
             if(results.length === 0){
                 result.forEach(function(result, key){
-                    results.push(`${key + 1}. ${result.guild_name} - **${result.fcount}**`)
+                    results.push(`${key + 1}. ${result.guild_name} - **${result.fcount.toLocaleString()}**`)
                 })
             }else {
                 results = [];
                 result.forEach(function(result, key){
-                    results.push(`${key + 1}. ${result.guild_name} - **${result.fcount}**`)
+                    results.push(`${key + 1}. ${result.guild_name} - **${result.fcount.toLocaleString()}**`)
                 })
             }
             if (err){
