@@ -1,4 +1,5 @@
 const util = require('util')
+const db = require('./analytics.js')
 
 module.exports = (client, cfg, dbl, mongo, util, blacklist) => {
 
@@ -39,7 +40,8 @@ module.exports = (client, cfg, dbl, mongo, util, blacklist) => {
     client.on('message', async msg => {
         //if(!client.database) return; //hard stop all message events if the database is not connected
         await client.database;
-        client.database.collection('messages').insertOne({guild_id: msg.guild.id, guild_name: msg.guild.name, username: msg.author.tag, userid: msg.author.id})
+        db.msgLogger(client, msg)
+        //client.database.collection('messages').insertOne({guild_id: msg.guild.id, guild_name: msg.guild.name, username: msg.author.tag, userid: msg.author.id})
         
         if(msg.content.toLowerCase() === 'f' || msg.content.toLowerCase() === '🇫') return client.commands.get("f").execute(client, msg)
         
@@ -52,8 +54,12 @@ module.exports = (client, cfg, dbl, mongo, util, blacklist) => {
         try{
             client.resource.cmdUsedLogger(client, command, commandArgs, msg)
             const commandToRun = client.commands.get(command)
-            if(!commandToRun) return
-            else return commandToRun.execute(client, msg, commandArgs);
+            if(!commandToRun){
+                return;
+            } else {
+                db.analyticsQuery(client, commandToRun)
+                return commandToRun.execute(client, msg, commandArgs);
+            }
         }catch(e){
             msg.reply(`\`\`\`js\n${util.inspect(e)}\`\`\``)
             console.log(`Error with executing command:\n`, e)
