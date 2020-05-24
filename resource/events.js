@@ -24,17 +24,13 @@ module.exports = (client, cfg, dbl, mongo, util, blacklist) => {
     })
 
     client.on("guildDelete", async (guild) => {
-        gl.send(client.resource.leaveEmbed(guild));
-        setTimeout(async () => {
-            client.user.setPresence({ activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | rb!help` } })
-        }, 2000)
+        client.user.setPresence({ activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | rb!help` } })
+        client.channels.cache.get(cfg.botinfo.guild_log_channel).send(client.resource.leaveEmbed(guild));
     })
 
     client.on("guildCreate", async (guild) => {
-        gl.send(client.resource.joinEmbed(guild));
-        setTimeout(async () => {
-            client.user.setPresence({ activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | rb!help` } })
-        }, 2000)
+        client.user.setPresence({ activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | rb!help` } })
+        client.channels.cache.get(cfg.botinfo.guild_log_channel).send(client.resource.joinEmbed(guild));
     })
 
     client.on('message', async msg => {
