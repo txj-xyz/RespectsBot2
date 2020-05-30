@@ -32,7 +32,7 @@ module.exports = {
 
         .addField('Users', `\`${client.guilds.cache.reduce((total,guild) => total + guild.memberCount, 0)}\``, true)
         .addField('Guilds', `\`${client.guilds.cache.size}\``, true)
-        .addField('Language', '`NodeJS`', true)
+        .addField('Library', '`DiscordJS`', true)
 
         .addField('RAM Used', `\`${formatBytes(process.memoryUsage().rss)}\``, true)
         .addField('Ping', `\`${client.ws.ping}ms\``, true)
