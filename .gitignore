@@ -1,5 +1,5 @@
 config.json
 /node_modules
-package_lock.json
+package-lock.json
 dev_app.js
 blacklist.json
