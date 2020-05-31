@@ -6,7 +6,10 @@ module.exports = {
 	name: 'help',
 	description: 'Shows all commands for the bot',
 	async execute(client, msg) {
-        if(helpList.length === 0) await client.commands.forEach(function(value, key) { helpList.push(`\`${cfg.bot.prefix}${key}\` - ${value.description}`) })
+        if(helpList.length === 0) await client.commands.forEach(function(value, key) {
+            helpList.push(`\`${cfg.bot.prefix}${key}\` - ${value.description}`)
+        })
+        
 
         const help1 = client.resource.embed()
             .setTitle('Respects Bot - Commands')
