@@ -32,17 +32,15 @@ module.exports = {
 
         .addField('Users', `\`${client.guilds.cache.reduce((total,guild) => total + guild.memberCount, 0)}\``, true)
         .addField('Guilds', `\`${client.guilds.cache.size}\``, true)
-        .addField('Library', '`DiscordJS`', true)
+        .addField('Library', '`Discord.JS`', true)
 
         .addField('RAM Used', `\`${formatBytes(process.memoryUsage().rss)}\``, true)
         .addField('Ping', `\`${client.ws.ping}ms\``, true)
         .addField('Messages', `**${msgCount.toLocaleString()}**`, true)
 
-        .addField('🇫 Ratelimit', `\`1000ms\``, true)
-        .addField('Developer', '`TXJ#0001`', true)
+        .addField('Shards', `\`${parseInt(client.options.shards) + 1}\``, true)
+        .addField('Developer', '`TXJ#5664`', true)
         .addField('Total Respects', `**${total.toLocaleString()}**`, true)
-        
-        //.addField('Shards', `\`${parseInt(client.options.shards) + 1}\``, true)
         )
 	},
 };
