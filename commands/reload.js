@@ -4,6 +4,8 @@ module.exports = {
 	name: 'reload',
 	description: 'Reload all commands with this!',
 	execute(client, msg, args) {
+
+		// TODO: Reload all requirements in the files and search for memory leaks.
 		if(msg.author.id != cfg.botinfo.ownerid) return msg.reply("You are not authorized to use this command.")
 		
 		if(args.length === 0) { 
