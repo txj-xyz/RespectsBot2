@@ -13,22 +13,25 @@ module.exports = (client, cfg, dbl, mongo, util, blacklist) => {
     }
 
     client.on('ready', async () => {
-        //if(!client.database) return;
         client.database = await connectDB()
         await client.reloadCommands()
+
         setInterval(async () => {
             dbl.postStats(client.guilds.cache.size).catch(e => console.log(`Error posting stats: ${e}`))
         }, 1800000)
+
         client.user.setPresence({ activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | rb!help` } })
         console.log(`${client.user.username} has started, with ${client.users.cache.size} users, in ${client.channels.cache.size} channels of ${client.guilds.cache.size} guilds with ${client.commands.size} commands.`);
     })
 
     client.on("guildDelete", async (guild) => {
+        console.log(`[INFO] - LEFT GUILD ${guild.id}`)
         client.user.setPresence({ activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | rb!help` } })
         client.channels.cache.get(cfg.botinfo.guild_log_channel).send(client.resource.leaveEmbed(guild));
     })
 
     client.on("guildCreate", async (guild) => {
+        console.log(`[INFO] - JOINED GUILD ${guild.id}`)
         client.user.setPresence({ activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | rb!help` } })
         client.channels.cache.get(cfg.botinfo.guild_log_channel).send(client.resource.joinEmbed(guild));
     })
