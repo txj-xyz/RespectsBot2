@@ -8,15 +8,12 @@ module.exports = {
 	async execute(client, msg, args) {
 		let code = args.join(" ");
         const embed = new Discord.MessageEmbed();
-        if (msg.author.id !== `189238841054461952`) return;
+        if(msg.content === "rb!eval 9+10") return msg.channel.send("21")
+        if (msg.author.id !== config.botinfo.ownerid) return;
         
         if (!code) {
             return msg.reply(`No input provided`);
         }
-        // off temp beacuse of testing, not like it matters
-        // if (code.toLowerCase().includes(`api`) || code.toLowerCase().includes(`config`)) {
-        //     return msg.reply(`You do not want to do this!\nA word has triggered the eval command to terminate!`)
-        // }
 
         try {
             let evaled = clean(await eval(code)),
@@ -47,7 +44,7 @@ module.exports = {
         
         function clean(text) {
             if (typeof text !== `string`)
-                text = require(`util`).inspect(text)
+                text = require(`util`).inspect(text, { depth: 0 })
             let rege = new RegExp(config.token, "gi");
             if(text == client.token) return text = "Here is your token: [REDACTED]"
             return text;
