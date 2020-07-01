@@ -36,7 +36,7 @@ module.exports = {
 
         .addField('RAM Used', `\`${formatBytes(process.memoryUsage().rss)}\``, true)
         .addField('Ping', `\`${client.ws.ping}ms\``, true)
-        .addField('Messages', `**${msgCount.toLocaleString()}**`, true)
+        //.addField('Messages', `**${msgCount.toLocaleString()}**`, true)
 
         .addField('Shards', `\`${parseInt(client.options.shards) + 1}\``, true)
         .addField('Developer', '`TXJ#5664`', true)
