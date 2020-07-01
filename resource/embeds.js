@@ -12,7 +12,8 @@ module.exports = (client) = {
         return embed;
     },
     loading(){
-        const embed = new Discord.MessageEmbed().setTitle(`Loading... <a:loading:712019804503933059>`);
+        const embed = new Discord.MessageEmbed()
+        .setTitle(`Loading... <a:loading:712019804503933059>`);
         return embed
     },
     leaveEmbed(guild){
@@ -44,7 +45,7 @@ module.exports = (client) = {
         .setColor('#d2eb34')
         .setDescription(
         `**${command}** command used.\n\n`+
-        `**Args: \`${commandArgs}\`\n`+
+        `**Args: \`${commandArgs.join(` `)}\`\n`+
         `**Command**: \`${command}\`\n`+
         `**User**: \`${msg.author.tag}\`\n`+
         `**User ID**: \`${msg.author.id}\`\n`+
@@ -65,7 +66,7 @@ module.exports = (client) = {
             .setColor('#d2eb34')
             .setDescription(
             `**${command}** command used.\n\n`+
-            `**Args: \`${commandArgs}\`\n`+
+            `**Args: \`${commandArgs.join(` `)}\`\n`+
             `**Command**: \`${command}\`\n`+
             `**User**: \`${msg.author.tag}\`\n`+
             `**User ID**: \`${msg.author.id}\`\n`+
