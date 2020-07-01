@@ -37,10 +37,8 @@ module.exports = (client, cfg, dbl, mongo, util, blacklist) => {
     })
 
     client.on('message', async msg => {
-        //if(!client.database) return; //hard stop all message events if the database is not connected
         await client.database;
-        db.msgLogger(client, msg)
-        //client.database.collection('messages').insertOne({guild_id: msg.guild.id, guild_name: msg.guild.name, username: msg.author.tag, userid: msg.author.id})
+        //db.msgLogger(client, msg)
         
         if(msg.content.toLowerCase() === 'f' || msg.content.toLowerCase() === '🇫') return client.commands.get("f").execute(client, msg)
         
