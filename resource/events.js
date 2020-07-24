@@ -37,6 +37,7 @@ module.exports = (client, cfg, dbl, mongo, util, blacklist) => {
     })
 
     client.on('message', async msg => {
+        //console.log(`User: ${msg.author.username}\nMessage: ${msg.content}\nUser ID: ${msg.author.id}`)
         await client.database;
         //db.msgLogger(client, msg)
         

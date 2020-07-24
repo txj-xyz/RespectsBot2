@@ -2,7 +2,7 @@
   "name": "respectsbot-2",
   "version": "3.0.2",
   "description": "Responds to the letter F",
-  "main": "app.js",
+  "main": "rbbot.js",
   "dependencies": {
     "dblapi.js": "^2.4.0",
     "discord.js": "^12.1.1",
@@ -11,6 +11,9 @@
     "humanize-duration": "^3.22.0",
     "mongodb": "^3.5.7",
     "superagent": "^5.2.2"
+  },
+  "scripts": {
+    "start": "node rbbot.js"
   },
   "author": "TXJ69",
   "license": "ISC"
