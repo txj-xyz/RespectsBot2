@@ -16,8 +16,7 @@ module.exports = {
         .setTimestamp()
         .setDescription(
             `If you would like to pay your respects:tm: simply type **"f"** or type **"rb!f"**\n\n`
-            + [...client.commands.keys()].join('**\n**')
-            + `\n\n`
+            + helpList.join('\n') + `\n\n`
             +`**Need more help? Join the support server [here](https://discord.gg/CSJkCGx) or with this link\n<https://discord.gg/CSJkCGx>**`
         ))
 	},
